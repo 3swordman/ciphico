@@ -11,8 +11,8 @@
 #include <unordered_map>
 #include <memory>
 #include <algorithm>
-#include <format>
 
+#include <cassert>
 #include <cstddef>
 #include <cstdlib>
 #include <cstdio>
