@@ -3,6 +3,10 @@
 #define LEXER_CPP
 #include "base.cpp"
 #include "is_something.cpp"
+/**
+ * @author 3swordman
+ * @copyright 3swordman
+ */
 namespace lexer {
     /**
      * @brief The state of parseing content
@@ -18,10 +22,11 @@ namespace lexer {
 
     /**
      * @brief Parse the file to a list
+     * @todo Make the code shorter
      * 
      * @param lexer_content The output of this function
      * @param file The phico source file
-     * @exception nothing When there are some error, the function will call make_lexer_error, and the program's exit code will be 1
+     * @exception nothing when there are some error, the function will call make_lexer_error, and the program's exit code will be 1
      */
     void parse(std::list<std::string>& lexer_content, std::FILE *file) noexcept {
         char_type type_of_i = char_type::unknown;

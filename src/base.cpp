@@ -4,7 +4,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <list>
-#include <vector>
 #include <deque>
 #include <string>
 #include <unordered_set>
@@ -14,7 +13,6 @@
 
 #include <cassert>
 #include <cstddef>
-#include <cstdlib>
 #include <cstdio>
 
 #include "is_something.cpp"
@@ -25,7 +23,7 @@ static const std::string EOL = "..";
  * @param str error message
  */
 [[ noreturn ]] void make_error(const std::string& str) {
-    std::cerr << str << std::endl;
+    std::cerr << "Error: " << str << std::endl;
     std::exit(1);
 }
 using namespace std::literals;
