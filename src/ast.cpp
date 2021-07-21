@@ -37,7 +37,7 @@ namespace ast {
     };
     /**
      * @brief Parse the lexer content, change it into an ast tree
-     * @bug 1 = 1 will become a tree with nothing
+     * @bug (a) is correct but not be allowed
      * 
      * @param lexer_content The output of lexer
      * @return Some ast tree
@@ -52,11 +52,9 @@ namespace ast {
             char_number += i.size();
             if (i == "(") {
                 // Put the thing to the stack
-                if (lexer_expr->content != "") {
-                    lexer_expr->childs.push_back(std::make_shared<tree>());
-                    stack.push_back(&*lexer_expr->childs.back());
-                    lexer_expr = stack.back();
-                }
+                lexer_expr->childs.push_back(std::make_shared<tree>());
+                stack.push_back(&*lexer_expr->childs.back());
+                lexer_expr = stack.back();
             } else if (i == ")") {
                 // Pop the stack
                 if (stack.size() < 2) {
@@ -73,7 +71,7 @@ namespace ast {
                 if (stack.size() != 1) {
                     make_error("unexpected \")\" at line "s + std::to_string(line_number) + " char "s + std::to_string(char_number));
                 }
-                result.push_back(tree{});
+                result.emplace_back();
                 lexer_expr = &result.back();
                 stack = { lexer_expr };
                 ++line_number;
@@ -82,7 +80,7 @@ namespace ast {
                 // It is a number
                 lexer_expr->content = i;
             } else if (i == ",") {
-                // Pop it and push it
+                // Pop from stack and push
                 stack.pop_back();
                 lexer_expr = stack.back();
                 lexer_expr->childs.push_back(std::make_shared<tree>());
@@ -100,12 +98,14 @@ namespace ast {
                 lexer_expr->content = i;
             } else if (is_operator(i) || maybe_operator(i[0])) {
                 // It is a operator
+                // Get the name of operator
                 auto& content = operator_map.find(i)->second;
                 auto tree_now = std::move(*lexer_expr);
                 lexer_expr->content = content;
-                lexer_expr->childs.clear();
-                lexer_expr->childs.push_back(std::make_shared<tree>(std::move(tree_now)));
-                lexer_expr->childs.push_back(std::make_shared<tree>());
+                lexer_expr->childs = {
+                    std::make_shared<tree>(std::move(tree_now)), 
+                    std::make_shared<tree>()
+                };
                 stack.push_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
 
