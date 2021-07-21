@@ -2,6 +2,10 @@
 #ifndef AST_CPP
 #define AST_CPP
 #include "base.cpp"
+/**
+ * @author 3swordman
+ * @copyright 3swordman
+ */
 namespace ast {
     /**
      * @brief The map contains operators
@@ -113,6 +117,9 @@ namespace ast {
                 // It isn't anything, make an error
                 make_error("unexpected \""s + i + "\" at line "s + std::to_string(line_number) + " char "s + std::to_string(char_number));
             }
+        }
+        if (stack.size() != 1) {
+            make_error("expect \")\" at line "s + std::to_string(line_number) + " char "s + std::to_string(char_number));
         }
         return result;
     }
