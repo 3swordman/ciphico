@@ -36,7 +36,7 @@ namespace ast {
      * @brief The abstract lexer tree
      */
     struct tree {
-        std::string content = "";
+        std::string content = "nothing";
         std::deque<std::shared_ptr<tree>> childs;
     };
     /**
