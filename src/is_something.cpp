@@ -102,7 +102,7 @@ bool is_operator(const std::string& str) noexcept {
 /**
  * @brief Tell you if the arg might be an operator
  * 
- * @param character 
+ * @param character A character you don't sure if it is an operator
  * @return If the arg might be a operator
  */
 bool maybe_operator(char character) noexcept {
