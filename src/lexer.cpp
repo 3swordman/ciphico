@@ -141,7 +141,7 @@ namespace lexer {
                         type_of_i = char_type::unknown;
                         goto restart;
                     } else {
-                        make_lexer_error("unknown operator: " + word + i);
+                        make_error("unknown operator: " + word + i);
                     }
                 case char_type::word:
                     if (i == '\n') {

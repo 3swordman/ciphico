@@ -8,6 +8,10 @@
 #include <deque>
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
+#include <memory>
+#include <algorithm>
+#include <format>
 
 #include <cstddef>
 #include <cstdlib>
@@ -20,10 +24,11 @@ static const std::string EOL = "..";
  * 
  * @param str error message
  */
-[[ noreturn ]] void make_lexer_error(const std::string& str) {
+[[ noreturn ]] void make_error(const std::string& str) {
     std::cerr << str << std::endl;
     std::exit(1);
 }
+using namespace std::literals;
 #if defined(__GNUC__) || defined(__clang__)
 #define expect_false(things) __builtin_expect(!!(things), 0)
 #define expect_true(things) __builtin_expect(!!(things), 1)
