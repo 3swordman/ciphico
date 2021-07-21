@@ -3,6 +3,9 @@
 #define AST_CPP
 #include "base.cpp"
 namespace ast {
+    /**
+     * @brief The map contains operators
+     */
     static std::unordered_map<std::string, std::string> operator_map {
         {"==", "_equals"},
         {"<=", "_less_equals"},
@@ -24,7 +27,7 @@ namespace ast {
         {"|", "_bit_or"},
         {"!", "_not"},
         {"=", "_set"}
-    };;
+    };
     /**
      * @brief The abstract lexer tree
      */
@@ -32,16 +35,9 @@ namespace ast {
         std::string content = "";
         std::deque<std::shared_ptr<tree>> childs;
     };
-    enum class char_type {
-        number,
-        string,
-        word,
-        symbol,
-        unknown
-    };
     /**
      * @brief Parse the lexer content, change it into an ast tree
-     * @bug many many many many bugs and very very very buggy
+     * @bug 1 = 1 will become a tree with nothing
      * 
      * @param lexer_content The output of lexer
      * @return Some ast tree
@@ -83,10 +79,10 @@ namespace ast {
                 ++line_number;
                 char_number = 0;
             } else if (isdigit(i[0])) {
-                // it is a number
+                // It is a number
                 lexer_expr->content = i;
             } else if (i == ",") {
-                // pop it and push it
+                // Pop it and push it
                 stack.pop_back();
                 lexer_expr = stack.back();
                 lexer_expr->childs.push_back(std::make_shared<tree>());
@@ -95,18 +91,26 @@ namespace ast {
             } else if (i[0] == '"') {
                 if (i.back() != '"') {
                     // There are some error
-                    if (i.find(EOL) != std::string::npos) {
-                        make_error("unexpected \" at line "s + std::to_string(line_number) + " char "s + std::to_string(char_number));
-                    } else {
-                        make_error("compiler error, please make an issue");
-                    }
+                    make_error("unexpected \" at line "s + std::to_string(line_number) + " char "s + std::to_string(char_number));
                 }
                 // It is a string
                 lexer_expr->content = i;
             } else if (std::isalpha(i[0]) || i[0] == '_') {
                 // It is a variable or a func
                 lexer_expr->content = i;
+            } else if (is_operator(i) || maybe_operator(i[0])) {
+                // It is a operator
+                auto& content = operator_map.find(i)->second;
+                auto tree_now = std::move(*lexer_expr);
+                lexer_expr->content = content;
+                lexer_expr->childs.clear();
+                lexer_expr->childs.push_back(std::make_shared<tree>(std::move(tree_now)));
+                lexer_expr->childs.push_back(std::make_shared<tree>());
+                stack.push_back(&*lexer_expr->childs.back());
+                lexer_expr = stack.back();
+
             } else {
+                // It isn't anything, make an error
                 make_error("unexpected \""s + i + "\" at line "s + std::to_string(line_number) + " char "s + std::to_string(char_number));
             }
         }
