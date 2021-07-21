@@ -19,6 +19,6 @@ int main(int argc, char *argv[]) {
         std::list<std::string> lexer_content;
         lexer::parse(lexer_content, file);
         auto ast_tree = ast::parse(lexer_content);
-        std::cout << ast_tree[0].content;
+        backend::execute(std::move(ast_tree));
     }
 }
