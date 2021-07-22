@@ -4,7 +4,7 @@
 #include "base.cpp"
 #include "backend/object.cpp"
 /**
- * @author 3swordman
+ * @author 3swordman 
  * @copyright 3swordman
  */
 namespace ast {
@@ -52,6 +52,7 @@ namespace ast {
         tree *lexer_expr = &result[0];
         std::vector<tree *> stack{lexer_expr};
         long line_number{1};
+        size_t frozen{};
         std::unordered_set<size_t> frozen_list{};
         lexer_content.push_back(EOL);
         for (std::string& i : lexer_content) {
@@ -61,6 +62,14 @@ namespace ast {
                 stack.push_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
             } else if (i == ")") {
+                if (frozen) {
+                    if (frozen_list.count(stack.size())) {
+                        frozen_list.erase(stack.size());
+                        stack.pop_back();
+                        lexer_expr = stack.back();
+                    }
+                    --frozen;
+                }
                 // Pop the stack
                 if (stack.size() < 2) {
                     // Only one? what the fucking program he make!
@@ -77,6 +86,14 @@ namespace ast {
                 // There is some error, but we ignore it
                 continue;
             } else if (i == EOL) {
+                if (frozen) {
+                    if (frozen_list.count(stack.size())) {
+                        frozen_list.erase(stack.size());
+                        stack.pop_back();
+                        lexer_expr = stack.back();
+                    }
+                    --frozen;
+                }
                 // It is the end of the line
                 if (stack.size() != 1) {
                     make_error("unexpected \")\" at line "s + std::to_string(line_number));
@@ -115,11 +132,7 @@ namespace ast {
             } else if (std::isalpha(i[0]) || i[0] == '_') {
                 // It is a variable or a func
                 lexer_expr->content = i;
-                if (frozen_list.count(stack.size())) {
-                    frozen_list.erase(stack.size());
-                    stack.pop_back();
-                    lexer_expr = stack.back();
-                }
+                ++frozen;
             } else if (is_operator(i) || maybe_operator(i[0])) {
                 // It is a operator
                 // Get the name of operator
