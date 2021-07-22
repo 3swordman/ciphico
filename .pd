@@ -1,1 +1,2 @@
-print(print(7, 8), print(5, 26))
+a = 1
+print(a)
