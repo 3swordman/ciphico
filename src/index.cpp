@@ -5,8 +5,8 @@
 /**
  * @brief Init the program
  */
-void init() {
-    std::ios::sync_with_stdio(false);
+inline void init() noexcept {
+    // Your code here
 }
 
 /**

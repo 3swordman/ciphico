@@ -77,7 +77,7 @@ namespace is_something_datas {
  * @param keyword_string Something you don't sure if it is a keyword
  * @return if the arg is a keyword
  */
-bool is_keyword(const std::string& keyword_string) noexcept {
+inline bool is_keyword(const std::string& keyword_string) noexcept {
     return is_something_datas::keyword_list.find(keyword_string) != is_something_datas::keyword_list.end();
 }
 
@@ -87,7 +87,7 @@ bool is_keyword(const std::string& keyword_string) noexcept {
  * @param character A character you don't sure if it is an operator
  * @return If the arg must be an operator
  */
-bool is_operator(char character) noexcept {
+inline bool is_operator(char character) noexcept {
     return is_something_datas::truely_operator_list.find(std::string("") + character) != is_something_datas::truely_operator_list.end();
 }
 /**
@@ -96,7 +96,7 @@ bool is_operator(char character) noexcept {
  * @param str A string you don't sure if it is an operator
  * @return If the arg must be an operator
  */
-bool is_operator(const std::string& str) noexcept {
+inline bool is_operator(const std::string& str) noexcept {
     return is_something_datas::truely_operator_list.find(str) != is_something_datas::truely_operator_list.end();
 }
 /**
@@ -105,7 +105,7 @@ bool is_operator(const std::string& str) noexcept {
  * @param character A character you don't sure if it is an operator
  * @return If the arg might be a operator
  */
-bool maybe_operator(char character) noexcept {
+inline bool maybe_operator(char character) noexcept {
     return is_something_datas::maybe_operator_list.find(character) != is_something_datas::maybe_operator_list.end() || is_operator(character);
 }
 
