@@ -8,13 +8,13 @@
  */
 namespace backend {
     class object;
-    static std::unordered_map<std::string, object> variable_map;
+    static std::unordered_map<std::string, std::shared_ptr<object>> variable_map;
     class object {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
         std::string get_str_from_raw_string() {
             auto& str = *raw_string;
             try {
-                return *variable_map.at(str).data();
+                return *variable_map.at(str)->data();
             } catch (const std::exception& e) {
                 return str;
             }
