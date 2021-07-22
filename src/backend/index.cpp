@@ -6,12 +6,18 @@
 #include "object.cpp"
 /**
  * @author 3swordman
- * @copyright 3swordman
  */
 namespace backend {
     #if defined(__GNUC__) || defined(__clang__)
     __attribute__(( pure ))
     #endif
+    /*/**
+     * @brief 
+     * 
+     * @param ast_tree 
+     * @return true 
+     * @return false 
+     */
     inline bool is_end(const ast::tree& ast_tree) noexcept {
         return ast_tree.childs.empty();
     }
@@ -28,12 +34,12 @@ namespace backend {
             auto& stack_number_back = stack_number.back();
             auto& stack_tree_back = stack_tree.back();
             for (size_t i = stack_number_back;i < stack_tree_back->childs.size();++i) {
-                    if (!is_end(*stack_tree_back->childs[i])) {
-                        stack_number_back = i + 1;
-                        stack_number.push_back(0);
-                        stack_tree.push_back(&*stack_tree_back->childs[i]);
-                        goto restart;
-                    }
+                if (!is_end(*stack_tree_back->childs[i])) {
+                    stack_number_back = i + 1;
+                    stack_number.push_back(0);
+                    stack_tree.push_back(&*stack_tree_back->childs[i]);
+                    goto restart;
+                }
             }
             try {
                 stack_tree_back->content = func_map.at(*stack_tree_back->content.data())(std::move(stack_tree_back->childs));
