@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
         auto file = std::fopen(argv[1], "r");
         std::list<std::string> lexer_content;
         lexer::parse(lexer_content, file);
-        auto ast_tree = ast::parse(lexer_content);
+        auto ast_tree = ast::parse(std::move(lexer_content));
         backend::execute(std::move(ast_tree));
     }
 }

@@ -28,14 +28,18 @@ namespace backend {
             auto& stack_number_back = stack_number.back();
             auto& stack_tree_back = stack_tree.back();
             for (size_t i = stack_number_back;i < stack_tree_back->childs.size();++i) {
-                if (!is_end(*stack_tree_back->childs[i])) {
-                    stack_number_back = i + 1;
-                    stack_number.push_back(0);
-                    stack_tree.push_back(&*stack_tree_back->childs[i]);
-                    goto restart;
-                }
+                    if (!is_end(*stack_tree_back->childs[i])) {
+                        stack_number_back = i + 1;
+                        stack_number.push_back(0);
+                        stack_tree.push_back(&*stack_tree_back->childs[i]);
+                        goto restart;
+                    }
             }
-            stack_tree_back->content = func_map.at(std::move(*stack_tree_back->content.data()))(std::move(stack_tree_back->childs));
+            try {
+                stack_tree_back->content = func_map.at(*stack_tree_back->content.data())(std::move(stack_tree_back->childs));
+            } catch (const std::exception& err) {
+                std::fprintf(stderr, "%s, %.*s", err.what(), static_cast<int>(stack_tree_back->content.data()->size()), stack_tree_back->content.data()->data());
+            }
             stack_tree_back->childs.clear();
             stack_number.pop_back();
             stack_tree.pop_back();

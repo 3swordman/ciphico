@@ -8,9 +8,17 @@
  */
 namespace backend {
     class object;
-    static const std::unordered_map<std::string, object> variable_map;
+    static std::unordered_map<std::string, object> variable_map;
     class object {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
+        std::string get_str_from_raw_string() {
+            auto& str = *raw_string;
+            try {
+                return *variable_map.at(str).data();
+            } catch (const std::exception& e) {
+                return str;
+            }
+        }
     public:
         object() = default;
         object(const object&) = default;
@@ -29,17 +37,22 @@ namespace backend {
             return raw_string;
         }
         std::string to_string() {
-            if (raw_string->empty()) {
+            auto str = get_str_from_raw_string();
+            if (str.empty()) {
                 return "";
-            } else if ((std::isdigit(raw_string->front()) || raw_string->front() == '-')) {
-                return *raw_string;
-            } else if (raw_string->front() == '"') {
-                auto temp = raw_string->substr(1, raw_string->size() - 2);
+            } else if ((std::isdigit(str.front()) || str.front() == '-')) {
+                return str;
+            } else if (str.front() == '"') {
+                auto temp = str.substr(1, str.size() - 2);
                 return temp;
             } else {
                 make_error("it is not anything");
             }
         }
     };
+    template <typename T1, typename T2>
+    void set_value(T1&& arg1, T2&& arg2) {
+        variable_map.insert_or_assign(std::forward<T1>(arg1), std::forward<T2>(arg2));
+    }
 };
 #endif
