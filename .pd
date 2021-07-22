@@ -1,1 +1,1 @@
-a(1, 2)
+print(print(7, 8), print(5, 26))

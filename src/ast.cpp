@@ -2,6 +2,7 @@
 #ifndef AST_CPP
 #define AST_CPP
 #include "base.cpp"
+#include "backend/object.cpp"
 /**
  * @author 3swordman
  * @copyright 3swordman
@@ -36,7 +37,7 @@ namespace ast {
      * @brief The abstract lexer tree
      */
     struct tree {
-        std::string content = "nothing";
+        backend::object content = "nothing"s;
         std::deque<std::shared_ptr<tree>> childs;
     };
     /**
@@ -103,9 +104,8 @@ namespace ast {
             } else if (is_operator(i) || maybe_operator(i[0])) {
                 // It is a operator
                 // Get the name of operator
-                auto& content = operator_map.find(i)->second;
                 auto tree_now = std::move(*lexer_expr);
-                lexer_expr->content = content;
+                lexer_expr->content = operator_map.find(i)->second;
                 lexer_expr->childs = {
                     std::make_shared<tree>(std::move(tree_now)), 
                     std::make_shared<tree>()
