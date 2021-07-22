@@ -14,7 +14,7 @@ namespace backend::lib {
      * @return The name of varible
      */
     object set(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        set_value(*args[0]->content.data(), args[1]->content);
+        set_value(*args[0]->content.data(), std::make_shared<object>(args[1]->content));
         return *args[0]->content.data();
     }
     /**
