@@ -17,7 +17,6 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstdio>
-#define noexcept
 #include "is_something.cpp"
 static const std::string EOL = "_Endl";
 /**
