@@ -1,2 +1,6 @@
-a = "asdfghjkl"
-print(a[int(get())])
+a = int(get())
+b = int(get())
+print("add: ", a + b)
+print("minus: ", a - b)
+print("mul: ", a * b)
+print("div: ", a / b)

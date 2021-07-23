@@ -20,12 +20,16 @@ namespace backend {
         {"abort", lib::abort},
         {"_set", lib::set},
         {"_add", lib::add},
+        {"_minus", lib::minus},
+        {"_mul", lib::mul},
+        {"_div", lib::div},
         {"nothing", lib::nothing},
         {"get", lib::get},
         {"int", lib::int_},
         {"str", lib::str_},
         {"del", lib::del_},
-        {"_getitem", lib::getitem_}
+        {"_getitem", lib::getitem_},
+        {"_make_array_index", lib::make_array_index}
     };
 };
 #endif

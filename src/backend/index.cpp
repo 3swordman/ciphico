@@ -31,7 +31,8 @@ namespace backend {
             try {
                 stack_tree_back->content = func_map.at(*stack_tree_back->content.data())(std::move(stack_tree_back->childs));
             } catch (const std::exception& err) {
-                std::fprintf(stderr, "%s, %.*s", err.what(), static_cast<int>(stack_tree_back->content.data()->size()), stack_tree_back->content.data()->data());
+                std::fprintf(stderr, "%s", err.what());
+                exit(1);
             }
             stack_tree_back->childs.clear();
             stack_number.pop_back();
