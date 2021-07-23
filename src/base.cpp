@@ -18,6 +18,9 @@
 #include <cstdlib>
 #include <cstdio>
 #include "is_something.cpp"
+#if defined(_WIN32) | defined(WIN32) || defined(_WIN64) || defined(WIN64)
+#include <Windows.h>
+#endif
 static const std::string EOL = "_Endl";
 /**
  * @brief Print error message and quit, the exit code is 1

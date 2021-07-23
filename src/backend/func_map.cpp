@@ -12,11 +12,13 @@ namespace backend {
     /**
      * @brief a map that contains diffrent type of function
      */
-    static const std::unordered_map<std::string, std::function<object(std::deque<std::shared_ptr<ast::tree>>&&)>> func_map {
+    static std::unordered_map<std::string, std::function<object(std::deque<std::shared_ptr<ast::tree>>&&)>> func_map {
         {"print", lib::print},
+        {"out", lib::print},
         {"exit", lib::exit},
         {"abort", lib::abort},
         {"_set", lib::set},
+        {"_add", lib::add},
         {"nothing", lib::nothing}
     };
 };

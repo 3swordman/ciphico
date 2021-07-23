@@ -13,7 +13,7 @@ namespace backend {
      * @todo don't use goto
      * @param ast_tree Ast tree
      */
-    void _execute(ast::tree&& ast_tree) noexcept {
+    void _optimize(ast::tree& ast_tree) noexcept {
         std::deque<ast::tree *> stack_tree{&ast_tree};
         std::deque<size_t> stack_number{0};
         while (!stack_number.empty()) {
@@ -28,23 +28,17 @@ namespace backend {
                     goto restart;
                 }
             }
-            try {
-                stack_tree_back->content = func_map.at(*stack_tree_back->content.data())(std::move(stack_tree_back->childs));
-            } catch (const std::exception& err) {
-                std::fprintf(stderr, "%s, %.*s", err.what(), static_cast<int>(stack_tree_back->content.data()->size()), stack_tree_back->content.data()->data());
-            }
-            stack_tree_back->childs.clear();
             stack_number.pop_back();
             stack_tree.pop_back();
         }
     }
     /**
-     * @brief Execute using the ast trees
+     * @brief Optimize using the ast trees
      * @param ast_tree Ast trees
      */
-    void execute(std::deque<ast::tree>&& ast_tree) noexcept {
+    void optimize(std::deque<ast::tree>& ast_tree) noexcept {
         for (auto&& i : ast_tree) {
-            _execute(std::move(i));
+            _optimize(i);
         }
     }
 };

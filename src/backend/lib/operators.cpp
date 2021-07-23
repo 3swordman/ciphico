@@ -17,6 +17,13 @@ namespace backend::lib {
         set_value(*args[0]->content.data(), std::make_shared<object>(args[1]->content));
         return *args[0]->content.data();
     }
+    object add(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        if (std::isdigit((args[0]->content.get_str_from_raw_string())[0]) && std::isdigit((args[1]->content.get_str_from_raw_string())[0])) {
+            return std::stol(args[0]->content.get_str_from_raw_string()) + std::stol(args[1]->content.get_str_from_raw_string());
+        } else {
+            return "\""s + args[0]->content.to_string() + args[1]->content.to_string() + "\""s;
+        }
+    }
     /**
      * @brief do nothing
      * 

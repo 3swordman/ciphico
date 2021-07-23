@@ -5,7 +5,6 @@
 #include "backend/object.cpp"
 /**
  * @author 3swordman 
- * @copyright 3swordman
  */
 namespace ast {
     /**
@@ -154,4 +153,17 @@ namespace ast {
         return result;
     }
 };
+/**
+ * @brief 
+ * 
+ * @param ast_tree 
+ * @return true 
+ * @return false 
+ */
+#if defined(__GNUC__) || defined(__clang__)
+__attribute__(( pure ))
+#endif
+inline bool is_end(const ast::tree& ast_tree) noexcept {
+    return ast_tree.childs.empty();
+}
 #endif
