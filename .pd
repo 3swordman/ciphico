@@ -1,4 +1,2 @@
-print(a = 1)
-print(a + 5)
-print(a = "1")
-print(a + "5")
+print(a = get())
+print(int(a) + str(5))
