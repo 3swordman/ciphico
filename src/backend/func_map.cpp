@@ -23,7 +23,9 @@ namespace backend {
         {"nothing", lib::nothing},
         {"get", lib::get},
         {"int", lib::int_},
-        {"str", lib::str_}
+        {"str", lib::str_},
+        {"del", lib::del_},
+        {"_getitem", lib::getitem_}
     };
 };
 #endif
