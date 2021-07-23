@@ -1,2 +1,2 @@
-print(a = get())
-print(int(a) + str(5))
+a = "asdfghjkl"
+print(a[int(get())])

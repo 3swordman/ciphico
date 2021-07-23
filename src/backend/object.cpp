@@ -11,6 +11,15 @@ namespace backend {
     class alignas(alignof(std::shared_ptr<std::string>)) object {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
     public:
+        std::shared_ptr<std::any> extra_content = std::make_shared<std::any>();
+        object& reload() {
+            try {
+                auto& data_ = variable_map.at(*raw_string);
+                raw_string = data_->raw_string;
+                extra_content = data_->extra_content;
+            } catch (const std::exception& e) {}
+            return *this;
+        }
         std::string get_str_from_raw_string() {
             auto& str = *raw_string;
             try {
@@ -20,12 +29,8 @@ namespace backend {
             }
         }
         object() = default;
-        object(const object& other) {
-            *raw_string = *other.raw_string;
-        }
-        object(object&& other) {
-            *raw_string = std::move(*other.raw_string);
-        }
+        object(const object&) = default;
+        object(object&&) = default;
         template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
         object(T&& number) {
             raw_string = std::make_shared<std::string>(std::to_string(std::forward<T>(number)));
@@ -33,14 +38,8 @@ namespace backend {
         object(const std::string& str) {
             raw_string = std::make_shared<std::string>(str);
         }
-        object& operator=(const object& other) {
-            *raw_string = *other.raw_string;
-            return *this;
-        }
-        object& operator=(object&& other) {
-            *raw_string = std::move(*other.raw_string);
-            return *this;
-        }
+        object& operator=(const object&) = default;
+        object& operator=(object&&) = default;
         ~object() = default;
         std::shared_ptr<std::string>& data() {
             return raw_string;

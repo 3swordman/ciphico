@@ -26,16 +26,17 @@ namespace backend {
         object exit(std::deque<std::shared_ptr<ast::tree>>&& args) {
             std::exit(std::stoi(args[0]->content.to_string()));
         }
+        #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
+        void dll_deleter(HINSTANCE *x) {
+            FreeLibrary(*x);
+        }
+        static std::unordered_map<std::string, std::shared_ptr<HINSTANCE>> modules;
         /**
          * @brief import module
          * 
          * @param args the name of module
          * @return nothing
          */
-        void dll_deleter(HINSTANCE *x) {
-            FreeLibrary(*x);
-        }
-        static std::unordered_map<std::string, std::shared_ptr<HINSTANCE>> modules;
         object import_(std::deque<std::shared_ptr<ast::tree>>&& args) {
             using func_type = object(*)(std::deque<std::shared_ptr<ast::tree>>&&);
             HINSTANCE *dll_instance;
@@ -46,6 +47,7 @@ namespace backend {
             dll_instance = &*modules.find(*args[0]->content.data())->second;
             return "0"s;
         }
+        #endif
     }    
 };
 #endif
