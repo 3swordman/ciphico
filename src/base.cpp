@@ -1,4 +1,5 @@
 #pragma once
+
 #ifndef BASE_CPP
 #define BASE_CPP
 #define _CRT_SECURE_NO_WARNINGS
@@ -12,6 +13,7 @@
 #include <utility>
 #include <functional>
 #include <type_traits>
+#include <iostream>
 
 #include <cassert>
 #include <cstddef>

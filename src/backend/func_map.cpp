@@ -5,6 +5,7 @@
 #include "lib/io.cpp"
 #include "lib/operators.cpp"
 #include "lib/stdlib.cpp"
+#include "lib/types.cpp"
 /**
  * @author 3swordman
  */
@@ -19,7 +20,10 @@ namespace backend {
         {"abort", lib::abort},
         {"_set", lib::set},
         {"_add", lib::add},
-        {"nothing", lib::nothing}
+        {"nothing", lib::nothing},
+        {"get", lib::get},
+        {"int", lib::int_},
+        {"str", lib::str_}
     };
 };
 #endif
