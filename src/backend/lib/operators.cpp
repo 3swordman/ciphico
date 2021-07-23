@@ -18,11 +18,20 @@ namespace backend::lib {
         return *args[0]->content.data();
     }
     object add(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        if (std::isdigit((args[0]->content.get_str_from_raw_string())[0]) && std::isdigit((args[1]->content.get_str_from_raw_string())[0])) {
+        if (std::isdigit((args[0]->content.get_str_from_raw_string()).back()) && std::isdigit((args[1]->content.get_str_from_raw_string()).back())) {
             return std::stol(args[0]->content.get_str_from_raw_string()) + std::stol(args[1]->content.get_str_from_raw_string());
         } else {
             return "\""s + args[0]->content.to_string() + args[1]->content.to_string() + "\""s;
         }
+    }
+    object minus(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        return std::stol(args[0]->content.get_str_from_raw_string()) - std::stol(args[1]->content.get_str_from_raw_string());
+    }
+    object mul(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        return std::stol(args[0]->content.get_str_from_raw_string()) * std::stol(args[1]->content.get_str_from_raw_string());
+    }
+    object div(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        return std::stol(args[0]->content.get_str_from_raw_string()) / std::stol(args[1]->content.get_str_from_raw_string());
     }
     /**
      * @brief do nothing
@@ -35,6 +44,9 @@ namespace backend::lib {
             return "0"s;
         }
         return args.back()->content;
+    }
+    object make_array_index(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        return *args[0]->content.data() + "`"s + *args[1]->content.data();
     }
 };
 #endif
