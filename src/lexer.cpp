@@ -5,7 +5,6 @@
 #include "is_something.cpp"
 /**
  * @author 3swordman
- * @copyright 3swordman
  */
 namespace lexer {
     /**

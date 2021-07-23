@@ -5,7 +5,6 @@
 #include <unordered_set>
 /**
  * @author 3swordman
- * @copyright 3swordman
  */
 namespace is_something_datas {
     /**

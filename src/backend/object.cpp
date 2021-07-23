@@ -4,13 +4,13 @@
 #include "../base.cpp"
 /**
  * @author 3swordman
- * @copyright 3swordman
  */
 namespace backend {
     class object;
     static std::unordered_map<std::string, std::shared_ptr<object>> variable_map;
-    class object {
+    class alignas(alignof(std::shared_ptr<std::string>)) object {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
+    public:
         std::string get_str_from_raw_string() {
             auto& str = *raw_string;
             try {
@@ -19,10 +19,13 @@ namespace backend {
                 return str;
             }
         }
-    public:
         object() = default;
-        object(const object&) = default;
-        object(object&&) = default;
+        object(const object& other) {
+            *raw_string = *other.raw_string;
+        }
+        object(object&& other) {
+            *raw_string = std::move(*other.raw_string);
+        }
         template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
         object(T&& number) {
             raw_string = std::make_shared<std::string>(std::to_string(std::forward<T>(number)));
@@ -30,8 +33,14 @@ namespace backend {
         object(const std::string& str) {
             raw_string = std::make_shared<std::string>(str);
         }
-        object& operator=(const object&) = default;
-        object& operator=(object&&) = default;
+        object& operator=(const object& other) {
+            *raw_string = *other.raw_string;
+            return *this;
+        }
+        object& operator=(object&& other) {
+            *raw_string = std::move(*other.raw_string);
+            return *this;
+        }
         ~object() = default;
         std::shared_ptr<std::string>& data() {
             return raw_string;
