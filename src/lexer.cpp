@@ -81,10 +81,10 @@ namespace lexer {
                         type_of_i = char_type::word;
                         word += i;
                     } 
-                    break;
+                    break; 
                 case char_type::comment:
                     // It's the comment, so we ignore it
-                    if (i == '\n') {
+                    if (expect_false(i == '\n')) {
                         type_of_i = char_type::unknown;
                         goto restart;
                     }
@@ -102,7 +102,7 @@ namespace lexer {
                     }
                     break;
                 case char_type::string:
-                    if (i == '"') {
+                    if (expect_false(i == '"')) {
                         // It is the end of a string
                         lexer_content.push_back(std::move(word) + "\"");
                         word = "";
@@ -171,6 +171,8 @@ namespace lexer {
                         word += i;
                     }
                     break;
+                default:
+                    assume_unreachable();
             }
         }
     }

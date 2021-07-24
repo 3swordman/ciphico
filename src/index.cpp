@@ -14,7 +14,7 @@ inline void init() noexcept {
  * @brief Main function
  */
 int main(int argc, char *argv[]) {
-    if (argc == 2) {
+    if (expect_true(argc == 2)) {
         init();
         auto file = std::fopen(argv[1], "r");
         std::list<std::string> lexer_content;

@@ -11,7 +11,7 @@ namespace translation {
         auto begin = lexer_content.begin(), end = lexer_content.end();
         size_t bracket_number{};
         for (;begin != end;++begin) {
-            if (*begin == "["s) {
+            if (expect_false_with_probability(*begin == "["s, 0.7)) {
                 lexer_content.insert(std::prev(begin), {
                     "("s,
                     "_getitem"s,

@@ -28,7 +28,7 @@ namespace backend {
         {"int", lib::int_},
         {"str", lib::str_},
         {"del", lib::del_},
-        {"_getitem", lib::getitem_},
+        {"_getitem", lib::getitem},
         {"_make_array_index", lib::make_array_index}
     };
 };

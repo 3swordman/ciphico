@@ -21,8 +21,10 @@ namespace backend::lib {
         return object{0};
     }
     object get(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        std::string return_value;
-        std::getline(std::cin, return_value);
+        char *c_str = static_cast<char *>(std::malloc(16 * sizeof(char)));
+        gets_s(c_str, 15);
+        std::string return_value{c_str};
+        std::free(c_str);
         return "\"" + return_value + "\"";
     }
 };

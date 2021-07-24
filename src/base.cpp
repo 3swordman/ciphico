@@ -25,6 +25,16 @@
 #include <Windows.h>
 #endif
 static const std::string EOL = "_Endl";
+
+#if defined(__GNUC__)
+#define assume_unreachable() __builtin_unreachable()
+#elif defined(_MSC_VER)
+#define assume_unreachable() __assume(0)
+#else
+// Well, it's better than nothing.
+#define assume_unreachable() std::abort()
+#endif
+
 /**
  * @brief Print error message and quit, the exit code is 1
  * 
@@ -37,10 +47,16 @@ static const std::string EOL = "_Endl";
 using namespace std::literals;
 using ssize_t = std::make_signed_t<size_t>;
 #if defined(__GNUC__) || defined(__clang__)
-#define expect_false(things) __builtin_expect(!!(things), 0)
-#define expect_true(things) __builtin_expect(!!(things), 1)
+#define expect_false(things) __builtin_expect(!!(things), false)
+#define expect_true(things) __builtin_expect(!!(things), true)
+#define expect_false_with_probability(things, probability) __builtin_expect_with_probability(!!(things), false, probability)
+#define expect_true_with_probability(things, probability) __builtin_expect_with_probability(!!(things), true, probability)
+#define prefetch_memory(...) __builtin_prefetch(__VA_ARGS__)
 #else
 #define expect_false(things) (!!(things))
 #define expect_true(things) (!!(things))
+#define expect_false_with_probability(things, probability) (!!(things))
+#define expect_true_with_probability(things, probability) (!!(things))
+#define prefetch_memory(...) (__VA_ARGS__)
 #endif
 #endif

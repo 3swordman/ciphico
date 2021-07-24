@@ -10,7 +10,7 @@ namespace ast {
     /**
      * @brief The map contains operators
      */
-    static std::unordered_map<std::string, std::string> operator_map {
+    const static std::unordered_map<std::string, std::string> operator_map {
         {"==", "_equals"},
         {"<=", "_less_equals"},
         {">=", "_greater_equals"},
@@ -36,7 +36,7 @@ namespace ast {
     /**
      * @brief The abstract lexer tree
      */
-    struct tree {
+    struct alignas(16) tree {
         backend::object content = "nothing"s;
         std::deque<std::shared_ptr<tree>> childs;
     };
@@ -71,7 +71,7 @@ namespace ast {
                     --frozen;
                 }
                 // Pop the stack
-                if (stack.size() < 2) {
+                if (expect_false_with_probability(stack.size() < 2, 0.9)) {
                     // Only one? what the fucking program he make!
                     make_error("unexpected \")\" at line "s + std::to_string(line_number));
                 }
@@ -118,7 +118,7 @@ namespace ast {
                 lexer_expr = &*lexer_expr->childs.back();
                 stack.push_back(lexer_expr);
             } else if (i[0] == '"') {
-                if (i.back() != '"') {
+                if (expect_true_with_probability(i.back() != '"', 0.9)) {
                     // There are some error
                     make_error("unexpected \" at line "s + std::to_string(line_number));
                 }
