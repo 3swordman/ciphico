@@ -14,7 +14,7 @@ namespace backend {
          * @param args it don't need any argument
          * @return null
          */
-        object abort(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        [[ noreturn ]] object abort(std::deque<std::shared_ptr<ast::tree>>&& args) {
             std::abort();
         }
         /**
@@ -23,7 +23,7 @@ namespace backend {
          * @param args the error code
          * @return null
          */
-        object exit(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        [[ noreturn ]] object exit(std::deque<std::shared_ptr<ast::tree>>&& args) {
             std::exit(std::stoi(args[0]->content.to_string()));
         }
         #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)

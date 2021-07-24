@@ -19,19 +19,19 @@ namespace backend::lib {
     }
     object add(std::deque<std::shared_ptr<ast::tree>>&& args) {
         if (std::isdigit((args[0]->content.get_str_from_raw_string()).back()) && std::isdigit((args[1]->content.get_str_from_raw_string()).back())) {
-            return std::stol(args[0]->content.get_str_from_raw_string()) + std::stol(args[1]->content.get_str_from_raw_string());
+            return std::stoll(args[0]->content.get_str_from_raw_string()) + std::stoll(args[1]->content.get_str_from_raw_string());
         } else {
             return "\""s + args[0]->content.to_string() + args[1]->content.to_string() + "\""s;
         }
     }
     object minus(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        return std::stol(args[0]->content.get_str_from_raw_string()) - std::stol(args[1]->content.get_str_from_raw_string());
+        return std::stoll(args[0]->content.get_str_from_raw_string()) - std::stoll(args[1]->content.get_str_from_raw_string());
     }
     object mul(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        return std::stol(args[0]->content.get_str_from_raw_string()) * std::stol(args[1]->content.get_str_from_raw_string());
+        return std::stoll(args[0]->content.get_str_from_raw_string()) * std::stoll(args[1]->content.get_str_from_raw_string());
     }
     object div(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        return std::stol(args[0]->content.get_str_from_raw_string()) / std::stol(args[1]->content.get_str_from_raw_string());
+        return std::stoll(args[0]->content.get_str_from_raw_string()) / std::stoll(args[1]->content.get_str_from_raw_string());
     }
     /**
      * @brief do nothing
