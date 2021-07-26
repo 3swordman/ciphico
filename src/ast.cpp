@@ -10,7 +10,7 @@ namespace ast {
     /**
      * @brief The map contains operators
      */
-    const static std::unordered_map<std::string, std::string> operator_map {
+    const static std::pmr::unordered_map<std::string, std::string> operator_map {
         {"==", "_equals"},
         {"<=", "_less_equals"},
         {">=", "_greater_equals"},
@@ -43,7 +43,7 @@ namespace ast {
     #endif
     tree {
         backend::object content = "nothing"s;
-        std::deque<std::shared_ptr<tree>> childs;
+        std::pmr::deque<std::shared_ptr<tree>> childs;
     };
     /**
      * @brief Parse the lexer content, change it into an ast tree
@@ -52,19 +52,19 @@ namespace ast {
      * @param lexer_content The output of lexer
      * @return Some ast tree
      */
-    auto parse(std::list<std::string>&& lexer_content) noexcept {
-        std::deque<tree> result{tree{}};
+    auto parse(std::pmr::list<std::string>&& lexer_content) noexcept {
+        std::pmr::deque<tree> result{tree{}};
         tree *lexer_expr = &result[0];
-        std::vector<tree *> stack{lexer_expr};
+        std::pmr::vector<tree *> stack{lexer_expr};
         long line_number{1};
         size_t frozen{};
-        std::unordered_set<size_t> frozen_list{};
-        lexer_content.push_back(EOL);
+        std::pmr::unordered_set<size_t> frozen_list{};
+        lexer_content.emplace_back(EOL);
         for (std::string& i : lexer_content) {
             if (i == "(") {
                 // Put the thing to the stack
-                lexer_expr->childs.push_back(std::make_shared<tree>());
-                stack.push_back(&*lexer_expr->childs.back());
+                lexer_expr->childs.emplace_back(std::make_shared<tree>());
+                stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
             } else if (i == ")" || i == "}") {
                 if (frozen) {
@@ -90,8 +90,8 @@ namespace ast {
             } else if (i == "{") {
                 // name it _func and put it into the stack
                 lexer_expr->content = "_func"s;
-                lexer_expr->childs.push_back(std::make_shared<tree>());
-                stack.push_back(&*lexer_expr->childs.back());
+                lexer_expr->childs.emplace_back(std::make_shared<tree>());
+                stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
             } else if (i.empty()) {
                 // There is some error, but we ignore it
@@ -125,9 +125,9 @@ namespace ast {
                 // Pop from stack and push
                 stack.pop_back();
                 lexer_expr = stack.back();
-                lexer_expr->childs.push_back(std::make_shared<tree>());
+                lexer_expr->childs.emplace_back(std::make_shared<tree>());
                 lexer_expr = &*lexer_expr->childs.back();
-                stack.push_back(lexer_expr);
+                stack.emplace_back(lexer_expr);
             } else if (i[0] == '"') {
                 if (expect_true_with_probability(i.back() != '"', 0.9)) {
                     // There are some error
@@ -153,7 +153,7 @@ namespace ast {
                     std::make_shared<tree>(std::move(tree_now)), 
                     std::make_shared<tree>()
                 };
-                stack.push_back(&*lexer_expr->childs.back());
+                stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
                 frozen_list.insert(stack.size());
 

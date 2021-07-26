@@ -10,7 +10,7 @@ namespace is_something_datas {
     /**
      * @brief A list which contains keywords
      */
-    static const std::unordered_set<std::string> keyword_list {
+    static const std::pmr::unordered_set<std::string> keyword_list {
         "if",
         "while",
         "else",
@@ -25,7 +25,7 @@ namespace is_something_datas {
     /**
      * @brief A list which contains operators
      */
-    static const std::unordered_set<std::string> truely_operator_list {
+    static const std::pmr::unordered_set<std::string> truely_operator_list {
         ".",
         ",",
         "(",
@@ -56,7 +56,7 @@ namespace is_something_datas {
     /**
      * @brief A list which contains things maybe operator, maybe a part of operator
      */
-    static const std::unordered_set<char> maybe_operator_list {
+    static const std::pmr::unordered_set<char> maybe_operator_list {
         '+',
         '-',
         '*',

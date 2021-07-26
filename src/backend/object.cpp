@@ -7,7 +7,7 @@
  */
 namespace backend {
     class object;
-    static std::unordered_map<std::string, std::shared_ptr<object>> variable_map;
+    static std::pmr::unordered_map<std::string, std::shared_ptr<object>> variable_map;
     class 
     #ifndef NDEBUG
     alignas(16) 

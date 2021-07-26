@@ -10,11 +10,11 @@
  * @author 3swordman
  */
 namespace backend {
-    using func_type = object(*)(std::deque<std::shared_ptr<ast::tree>>&&) noexcept;
+    using func_type = object(*)(std::pmr::deque<std::shared_ptr<ast::tree>>&&) noexcept;
     /**
      * @brief a map that contains diffrent type of function
      */
-    static const std::unordered_map<std::string, func_type> func_map {
+    static const std::pmr::unordered_map<std::string, func_type> func_map {
         {"print", lib::print},
         {"out", lib::print},
         {"exit", lib::exit},
