@@ -39,7 +39,7 @@ namespace backend {
     #else 
     inline
     #endif
-    void execute(std::deque<ast::tree>&& ast_tree) noexcept {
+    void execute(std::pmr::deque<ast::tree>&& ast_tree) noexcept {
         for (auto&& i : ast_tree) { 
             _execute(i);
         }

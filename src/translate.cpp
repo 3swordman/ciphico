@@ -7,7 +7,7 @@
  * @author 3swordman 
  */
 namespace translation {
-    void remove_empty_line(std::list<std::string>& syntax_content) noexcept {
+    void remove_empty_line(std::pmr::list<std::string>& syntax_content) noexcept {
         size_t lines = 1;
         syntax_content.remove_if([&lines](const std::string& str) {
             if (str == EOL) {
@@ -23,7 +23,7 @@ namespace translation {
         });
     }
 
-    void keyword_to_func(std::list<std::string>& syntax_content) noexcept {
+    void keyword_to_func(std::pmr::list<std::string>& syntax_content) noexcept {
         auto i = syntax_content.begin(), end = syntax_content.end();
         for (;i != end;++i) {
             if (is_something_datas::keyword_list.count(*i)) {
@@ -55,7 +55,7 @@ namespace translation {
         }
     }
 
-    void process_func_which_have_args(std::list<std::string>& syntax_content) noexcept {
+    void process_func_which_have_args(std::pmr::list<std::string>& syntax_content) noexcept {
         auto i = syntax_content.begin(), end = syntax_content.end();
         for (;i != end;++i) {
             if (*i == "func") {
@@ -92,9 +92,9 @@ namespace translation {
     }
 
 
-    void make_func_better(std::list<std::string>& syntax_content) noexcept {
+    void make_func_better(std::pmr::list<std::string>& syntax_content) noexcept {
         auto iter = std::find(syntax_content.begin(), syntax_content.end(), "{"s);
-        auto end_pos = std::find(syntax_content.rbegin(), std::list<std::string>::reverse_iterator(iter), "}"s).base();
+        auto end_pos = std::find(syntax_content.rbegin(), std::pmr::list<std::string>::reverse_iterator(iter), "}"s).base();
         std::replace(iter, end_pos, EOL, ","s);
         bool is_bracket = false;
         syntax_content.remove_if([&is_bracket](const std::string& str) {
@@ -123,13 +123,13 @@ namespace translation {
         }).base());
         iter = syntax_content.begin();
         bool frozen{};
-        std::vector<bool> func_lambda_stack{}; // true: lambda, false: function arg
+        std::pmr::vector<bool> func_lambda_stack{}; // true: lambda, false: function arg
         size_t s{};
         for (;iter != syntax_content.end();++iter,++s) {
             switch ((*iter)[0]) {
                 case '(':
                     if (!frozen) {
-                        func_lambda_stack.push_back(false);
+                        func_lambda_stack.emplace_back(false);
                     } else {
                         frozen = false;
                     }
@@ -138,7 +138,7 @@ namespace translation {
                     func_lambda_stack.pop_back();
                     break;
                 case '{':
-                    func_lambda_stack.push_back(true);
+                    func_lambda_stack.emplace_back(true);
                     frozen = true;
                     syntax_content.insert(std::next(iter), "(");
                     break;
@@ -157,7 +157,7 @@ namespace translation {
             }
         }
     }
-    void translate(std::list<std::string>& lexer_content) noexcept {
+    void translate(std::pmr::list<std::string>& lexer_content) noexcept {
         auto begin = lexer_content.begin(), end = lexer_content.end();
         size_t bracket_number{};
         for (;begin != end;++begin) {
@@ -185,7 +185,7 @@ namespace translation {
         }
     }
     
-    void parse(std::list<std::string>& syntax_content) noexcept {
+    void parse(std::pmr::list<std::string>& syntax_content) noexcept {
         syntax_content.remove("var"s);
         remove_empty_line(syntax_content);
         translate(syntax_content);

@@ -17,6 +17,7 @@
 #include <array>
 #include <chrono>
 #include <iostream>
+#include <memory_resource>
 
 #include <cassert>
 #include <cstddef>

@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
     if (expect_true_with_probability(argc == 2, 0.99)) {
         auto d = std::chrono::high_resolution_clock::now();
         init();
-        auto file = std::fopen(argv[1], "r");
-        std::list<std::string> lexer_content;
+        auto file = std::fopen(argv[1], "rb");
+        std::pmr::list<std::string> lexer_content;
         lexer::parse(lexer_content, file);
         std::fclose(file);
         translation::parse(lexer_content);

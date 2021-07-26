@@ -27,7 +27,7 @@ namespace lexer {
      * @param file The phico source file
      * @exception when there are some error, the function will call make_lexer_error, and the program's exit code will be 1
      */
-    void parse(std::list<std::string>& lexer_content, std::FILE *file) noexcept {
+    void parse(std::pmr::list<std::string>& lexer_content, std::FILE *file) noexcept {
         char_type type_of_i = char_type::unknown;
         std::string word = "";
         static std::array<char, 32> buf;
@@ -42,10 +42,8 @@ namespace lexer {
             }
             // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
             if (already_read == char_need_to_read) {
-                if (std::feof(file) || std::ferror(file)) {
-                    i = ' ';
-                    should_stop = true;
-                } else {
+                if (std::fgetc(file) != EOF) {
+                    std::fseek(file, -1, SEEK_CUR);
                     size_t size = std::fread(buf.data(), sizeof(char), 32, file);
                     if (size == char_need_to_read) {
                         i = buf[0];
@@ -60,6 +58,9 @@ namespace lexer {
                             already_read = 1;
                         }
                     }
+                } else {
+                    i = ' ';
+                    should_stop = true;
                 }
             } else {
                 i = buf[already_read];
@@ -76,7 +77,7 @@ namespace lexer {
                     } else if (is_operator(i)) {
                         // The variable i is an operator, it means there are some other thing like number and string after it
                         // We don't know what is it, so type_of_i is still char_type::unknown
-                        lexer_content.push_back(i + ""s);
+                        lexer_content.emplace_back(i + ""s);
                         break;
                     } else if (maybe_operator(i)) {
                         // The variable i might be an operator, might be a part of operator
@@ -87,12 +88,12 @@ namespace lexer {
                     } else if (i == '"') {
                         // The variable i is the beginning of a string
                         type_of_i = char_type::string;
-                    } else if (i == ' ' || i == '\r') {
-                        // The variable i is some useless thing like space
-                        break;
                     } else if (i == '\n') {
                         // The variable i is the end of line
-                        lexer_content.push_back(EOL);
+                        lexer_content.emplace_back(EOL);
+                        break;
+                    } else if (std::isspace(i)) {
+                        // The variable i is some useless thing like space
                         break;
                     } else {
                         // The variable i is a word, the content of it may be a function or a variable
@@ -113,7 +114,7 @@ namespace lexer {
                         word += i;
                     } else {
                         // It isn't the digit, it's the end of the number
-                        lexer_content.push_back(std::move(word));
+                        lexer_content.emplace_back(std::move(word));
                         word = "";
                         type_of_i = char_type::unknown;
                         goto restart;
@@ -122,7 +123,7 @@ namespace lexer {
                 case char_type::string:
                     if (expect_false_with_probability(i == '"', 0.8)) {
                         // It is the end of a string
-                        lexer_content.push_back(std::move(word) + "\"");
+                        lexer_content.emplace_back(std::move(word) + "\"");
                         word = "";
                         type_of_i = char_type::unknown;
                     } else {
@@ -133,20 +134,20 @@ namespace lexer {
                 case char_type::symbol:
                     if (i == '\n' || i == '"' || std::isalnum(i)) { 
                         // There is a newline between the words
-                        lexer_content.push_back(std::move(word));
+                        lexer_content.emplace_back(std::move(word));
                         word = "";
                         type_of_i = char_type::unknown;
                         goto restart;
                     } else if (i == ' ') {
                         // There is a space between the symbols
-                        lexer_content.push_back(std::move(word));
+                        lexer_content.emplace_back(std::move(word));
                         word = "";
                         type_of_i = char_type::unknown;
                         break;
                     } else if (is_operator(word + i)) {
                         // this is a operator
                         word += i;
-                        lexer_content.push_back(std::move(word));
+                        lexer_content.emplace_back(std::move(word));
                         word = "";
                         type_of_i = char_type::unknown;
                         break;
@@ -156,7 +157,7 @@ namespace lexer {
                 case char_type::word:
                     if (i == '\n' || i == ' ' || maybe_operator(i)) {
                         // It is the end of a word
-                        lexer_content.push_back(std::move(word));
+                        lexer_content.emplace_back(std::move(word));
                         word = "";
                         type_of_i = char_type::unknown;
                         goto restart;
