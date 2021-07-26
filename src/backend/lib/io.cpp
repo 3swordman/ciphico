@@ -13,7 +13,7 @@ namespace backend::lib {
      * @param args things you want to print to the stdout
      * @return null
      */
-    object print(std::deque<std::shared_ptr<ast::tree>>&& args) {
+    object print(std::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
         for (auto&& i : args) {
             std::printf("%.*s ", static_cast<int>(i->content.to_string().size()), i->content.to_string().data());
         }
@@ -26,7 +26,7 @@ namespace backend::lib {
      * @param args nothing
      * @return object 
      */
-    object get(std::deque<std::shared_ptr<ast::tree>>&& args) {
+    object get(std::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
         char *c_str = static_cast<char *>(std::malloc(256 * sizeof(char)));
         if (expect_true_with_probability(!std::fgets(c_str, 255, stdin), 0.9)) {
             make_error("Some errors about io have been happened");

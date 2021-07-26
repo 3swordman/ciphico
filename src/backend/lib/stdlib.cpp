@@ -13,7 +13,7 @@ namespace backend::lib {
      * @param args it don't need any argument
      * @return null
      */
-    [[ noreturn ]] object abort(std::deque<std::shared_ptr<ast::tree>>&& args) {
+    [[ noreturn ]] object abort(std::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
         std::abort();
     }
     /**
@@ -22,7 +22,7 @@ namespace backend::lib {
      * @param args the error code
      * @return null
      */
-    [[ noreturn ]] object exit(std::deque<std::shared_ptr<ast::tree>>&& args) {
+    [[ noreturn ]] object exit(std::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
         std::exit(std::stoi(args[0]->content.to_string()));
     }
 };

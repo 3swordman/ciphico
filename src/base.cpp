@@ -14,6 +14,7 @@
 #include <functional>
 #include <type_traits>
 #include <any>
+#include <array>
 #include <chrono>
 #include <iostream>
 

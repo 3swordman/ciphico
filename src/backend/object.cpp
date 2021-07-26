@@ -8,7 +8,11 @@
 namespace backend {
     class object;
     static std::unordered_map<std::string, std::shared_ptr<object>> variable_map;
-    class alignas(16) object {
+    class 
+    #ifndef NDEBUG
+    alignas(16) 
+    #endif
+    object {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
     public:
         std::shared_ptr<std::any> extra_content = std::make_shared<std::any>();
@@ -61,8 +65,7 @@ namespace backend {
             } else if (expect_true_with_probability(std::isdigit(str.front()) || str.front() == '-', 0.6)) {
                 return str;
             } else if (str.front() == '"') {
-                auto temp = str.substr(1, str.size() - 2);
-                return temp;
+                return str.substr(1, str.size() - 2);
             } else {
                 make_error("it is not anything");
             }

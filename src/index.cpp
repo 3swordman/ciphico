@@ -19,16 +19,14 @@ Use "ciphico [filename]" to run the phico code.)";
 int main(int argc, char *argv[]) {
     if (expect_true_with_probability(argc == 2, 0.99)) {
         auto d = std::chrono::high_resolution_clock::now();
-        for (int i = 0;i < 100;++i) {
-            init();
-            auto file = std::fopen(argv[1], "r");
-            std::list<std::string> lexer_content;
-            lexer::parse(lexer_content, file);
-            std::fclose(file);
-            translation::parse(lexer_content);
-            auto ast_tree = ast::parse(std::move(lexer_content));
-            backend::execute(std::move(ast_tree));
-        }
+        init();
+        auto file = std::fopen(argv[1], "r");
+        std::list<std::string> lexer_content;
+        lexer::parse(lexer_content, file);
+        std::fclose(file);
+        translation::parse(lexer_content);
+        auto ast_tree = ast::parse(std::move(lexer_content));
+        backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
         std::cout << (e - d) / 1us << std::endl;
         return 0;
