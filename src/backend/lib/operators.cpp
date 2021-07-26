@@ -33,6 +33,9 @@ namespace backend::lib {
     object div(std::deque<std::shared_ptr<ast::tree>>&& args) {
         return std::stoll(args[0]->content.get_str_from_raw_string()) / std::stoll(args[1]->content.get_str_from_raw_string());
     }
+    object mod(std::deque<std::shared_ptr<ast::tree>>&& args) {
+        return std::stoll(args[0]->content.get_str_from_raw_string()) % std::stoll(args[1]->content.get_str_from_raw_string());
+    }
     /**
      * @brief do nothing
      * 

@@ -45,7 +45,11 @@ namespace backend {
         object& operator=(object&&) noexcept = default;
         ~object() = default;
         #if defined(__GNUC__) || defined(__clang__)
-        __attribute__(( pure, always_inline ))
+        [[ gnu::pure, gnu::always_inline ]] inline
+        #elif defined(_MSC_VER)
+        __forceinline
+        #else
+        inline
         #endif
         std::shared_ptr<std::string>& data() noexcept {
             return raw_string;
@@ -54,7 +58,7 @@ namespace backend {
             auto str = get_str_from_raw_string();
             if (expect_false_with_probability(str.empty(), 0.9)) {
                 return "";
-            } else if ((std::isdigit(str.front()) || str.front() == '-')) {
+            } else if (expect_true_with_probability(std::isdigit(str.front()) || str.front() == '-', 0.6)) {
                 return str;
             } else if (str.front() == '"') {
                 auto temp = str.substr(1, str.size() - 2);

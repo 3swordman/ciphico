@@ -20,11 +20,20 @@ namespace backend::lib {
         std::printf("\n");
         return object{0};
     }
+    /**
+     * @brief Get the string from stdin
+     * 
+     * @param args nothing
+     * @return object 
+     */
     object get(std::deque<std::shared_ptr<ast::tree>>&& args) {
-        char *c_str = static_cast<char *>(std::malloc(16 * sizeof(char)));
-        gets_s(c_str, 15);
+        char *c_str = static_cast<char *>(std::malloc(256 * sizeof(char)));
+        if (expect_true_with_probability(!std::fgets(c_str, 255, stdin), 0.9)) {
+            make_error("Some errors about io have been happened");
+        }
         std::string return_value{c_str};
         std::free(c_str);
+        return_value.erase(return_value.size() - 1);
         return "\"" + return_value + "\"";
     }
 };

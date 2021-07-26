@@ -35,9 +35,9 @@ namespace lexer {
         bool has_more_char{};
         while (true) {
             // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
-            if (expect_true(!has_more_char)) {
+            if (expect_true_with_probability(!has_more_char, 0.9)) {
                 _i = std::fgetc(file);
-                if (expect_false(_i == EOF)) {
+                if (expect_false_with_probability(_i == EOF, 0.85)) {
                     has_more_char = true;
                     _i = ' ';
                 }
@@ -52,57 +52,55 @@ namespace lexer {
                     if (i == '#') {
                         // The variable i is '#', it means there are some comment after it
                         type_of_i = char_type::comment;
+                        break;
                     } else if (is_operator(i)) {
                         // The variable i is an operator, it means there are some other thing like number and string after it
                         // We don't know what is it, so type_of_i is still char_type::unknown
-                        std::string temp;
-                        temp += i;
-                        lexer_content.push_back(std::move(temp));
+                        lexer_content.push_back(i + ""s);
+                        break;
                     } else if (maybe_operator(i)) {
                         // The variable i might be an operator, might be a part of operator
                         type_of_i = char_type::symbol;
-                        word += i;
                     } else if (std::isdigit(i)) {
                         // The variable i is a digit, there are also some digit after it
                         type_of_i = char_type::number;
-                        word += i;
                     } else if (i == '"') {
                         // The variable i is the beginning of a string
                         type_of_i = char_type::string;
-                        word += i;
                     } else if (i == ' ' || i == '\r') {
                         // The variable i is some useless thing like space
                         break;
                     } else if (i == '\n') {
                         // The variable i is the end of line
                         lexer_content.push_back(EOL);
+                        break;
                     } else {
                         // The variable i is a word, the content of it may be a function or a variable
                         type_of_i = char_type::word;
-                        word += i;
-                    } 
+                    }
+                    word += i;
                     break; 
                 case char_type::comment:
                     // It's the comment, so we ignore it
-                    if (expect_false(i == '\n')) {
+                    if (expect_false_with_probability(i == '\n', 0.95)) {
                         type_of_i = char_type::unknown;
                         goto restart;
                     }
                     break;
                 case char_type::number:
-                    if (!std::isdigit(i)) {
+                    if (std::isdigit(i)) {
+                        // The variable i is a digit, so put it into the word
+                        word += i;
+                    } else {
                         // It isn't the digit, it's the end of the number
                         lexer_content.push_back(std::move(word));
                         word = "";
                         type_of_i = char_type::unknown;
                         goto restart;
-                    } else {
-                        // The variable i is a digit, so put it into the word
-                        word += i;
                     }
                     break;
                 case char_type::string:
-                    if (expect_false(i == '"')) {
+                    if (expect_false_with_probability(i == '"', 0.8)) {
                         // It is the end of a string
                         lexer_content.push_back(std::move(word) + "\"");
                         word = "";
@@ -113,7 +111,7 @@ namespace lexer {
                     }
                     break;
                 case char_type::symbol:
-                    if (i == '\n') { 
+                    if (i == '\n' || i == '"' || std::isalnum(i)) { 
                         // There is a newline between the words
                         lexer_content.push_back(std::move(word));
                         word = "";
@@ -125,12 +123,6 @@ namespace lexer {
                         word = "";
                         type_of_i = char_type::unknown;
                         break;
-                    } else if (i == '"') {
-                        // There is a space between the symbols
-                        lexer_content.push_back(std::move(word));
-                        word = "";
-                        type_of_i = char_type::unknown;
-                        goto restart;
                     } else if (is_operator(word + i)) {
                         // this is a operator
                         word += i;
@@ -138,29 +130,11 @@ namespace lexer {
                         word = "";
                         type_of_i = char_type::unknown;
                         break;
-                    } else if (std::isdigit(i) || std::isalpha(i)) {
-                        // the beginning of it is an operator
-                        lexer_content.push_back(std::move(word));
-                        word = "";
-                        type_of_i = char_type::unknown;
-                        goto restart;
                     } else {
                         make_error("unknown operator: " + word + i);
                     }
                 case char_type::word:
-                    if (i == '\n') {
-                        // It is the end of a word
-                        lexer_content.push_back(std::move(word));
-                        word = "";
-                        type_of_i = char_type::unknown;
-                        goto restart;
-                    } else if (i == ' ') {
-                        // It is the end of a word
-                        lexer_content.push_back(std::move(word));
-                        word = "";
-                        type_of_i = char_type::unknown;
-                        break;
-                    } else if (maybe_operator(i)) {
+                    if (i == '\n' || i == ' ' || maybe_operator(i)) {
                         // It is the end of a word
                         lexer_content.push_back(std::move(word));
                         word = "";

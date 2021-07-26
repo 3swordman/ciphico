@@ -23,6 +23,7 @@ namespace backend {
         {"_minus", lib::minus},
         {"_mul", lib::mul},
         {"_div", lib::div},
+        {"_mod", lib::mod},
         {"nothing", lib::nothing},
         {"get", lib::get},
         {"int", lib::int_},
