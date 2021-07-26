@@ -25,25 +25,45 @@ namespace lexer {
      * 
      * @param lexer_content The output of this function
      * @param file The phico source file
-     * @exception nothing when there are some error, the function will call make_lexer_error, and the program's exit code will be 1
+     * @exception when there are some error, the function will call make_lexer_error, and the program's exit code will be 1
      */
     void parse(std::list<std::string>& lexer_content, std::FILE *file) noexcept {
         char_type type_of_i = char_type::unknown;
         std::string word = "";
-        int _i;
+        static std::array<char, 32> buf;
+        size_t char_need_to_read = 32;
+        size_t already_read = 32;
+        bool should_stop = false;
+        bool is_eof = false;
         char i;
-        bool has_more_char{};
         while (true) {
-            // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
-            if (expect_true_with_probability(!has_more_char, 0.9)) {
-                _i = std::fgetc(file);
-                if (expect_false_with_probability(_i == EOF, 0.85)) {
-                    has_more_char = true;
-                    _i = ' ';
-                }
-                i = char(_i);
-            } else {
+            if (should_stop) {
                 break;
+            }
+            // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
+            if (already_read == char_need_to_read) {
+                if (std::feof(file) || std::ferror(file)) {
+                    i = ' ';
+                    should_stop = true;
+                } else {
+                    size_t size = std::fread(buf.data(), sizeof(char), 32, file);
+                    if (size == char_need_to_read) {
+                        i = buf[0];
+                        already_read = 1;
+                    } else {
+                        if (char_need_to_read != 32) {
+                            i = ' ';
+                            should_stop = true;
+                        } else {
+                            char_need_to_read = size;
+                            i = buf[0];
+                            already_read = 1;
+                        }
+                    }
+                }
+            } else {
+                i = buf[already_read];
+                ++already_read;
             }
             // Main code
             restart:

@@ -37,7 +37,11 @@ namespace ast {
     /**
      * @brief The abstract lexer tree
      */
-    struct alignas(16) tree {
+    struct 
+    #ifndef NDEBUG
+    alignas(16) 
+    #endif
+    tree {
         backend::object content = "nothing"s;
         std::deque<std::shared_ptr<tree>> childs;
     };
