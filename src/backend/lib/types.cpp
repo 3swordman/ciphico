@@ -28,7 +28,10 @@ namespace backend::lib {
             );
             return return_value;
         } else {
-            return args[0]->content.to_string().substr(std::stoll(args[1]->content.data()->substr(0, temp)) - 1, std::stoll(args[1]->content.data()->substr(temp + 1, args[1]->content.data()->size() - 2)));
+            return args[0]->content.to_string().substr(
+                std::stoll(args[1]->content.data()->substr(0, temp)) - 1, 
+                std::stoll(args[1]->content.data()->substr(temp + 1, args[1]->content.data()->size() - 2))
+            );
         }
     }
     object del_(std::deque<std::shared_ptr<ast::tree>>&& args) {

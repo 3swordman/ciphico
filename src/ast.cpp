@@ -27,6 +27,7 @@ namespace ast {
         {"-", "_minus"},
         {"*", "_mul"},
         {"/", "_div"},
+        {"%", "_mod"},
         {"&", "_bit_and"},
         {"|", "_bit_or"},
         {"!", "_not"},
@@ -47,7 +48,7 @@ namespace ast {
      * @param lexer_content The output of lexer
      * @return Some ast tree
      */
-    std::deque<tree> parse(std::list<std::string>&& lexer_content) noexcept {
+    auto parse(std::list<std::string>&& lexer_content) noexcept {
         std::deque<tree> result{tree{}};
         tree *lexer_expr = &result[0];
         std::vector<tree *> stack{lexer_expr};
@@ -61,7 +62,7 @@ namespace ast {
                 lexer_expr->childs.push_back(std::make_shared<tree>());
                 stack.push_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
-            } else if (i == ")") {
+            } else if (i == ")" || i == "}") {
                 if (frozen) {
                     if (frozen_list.count(stack.size())) {
                         frozen_list.erase(stack.size());
@@ -82,6 +83,12 @@ namespace ast {
                     stack.pop_back();
                     lexer_expr = stack.back();
                 }
+            } else if (i == "{") {
+                // name it _func and put it into the stack
+                lexer_expr->content = "_func"s;
+                lexer_expr->childs.push_back(std::make_shared<tree>());
+                stack.push_back(&*lexer_expr->childs.back());
+                lexer_expr = stack.back();
             } else if (i.empty()) {
                 // There is some error, but we ignore it
                 continue;
@@ -162,9 +169,13 @@ namespace ast {
  * @return false 
  */
 #if defined(__GNUC__) || defined(__clang__)
-__attribute__(( pure ))
+[[ gnu::pure, gnu::always_inline ]] inline
+#elif defined(_MSC_VER)
+__forceinline
+#else
+inline
 #endif
-inline bool is_end(const ast::tree& ast_tree) noexcept {
+bool is_end(const ast::tree& ast_tree) noexcept {
     return ast_tree.childs.empty();
 }
 #endif
