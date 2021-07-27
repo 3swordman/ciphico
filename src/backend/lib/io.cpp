@@ -14,11 +14,15 @@ namespace backend::lib {
      * @return null
      */
     object print(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+        if (args.empty()) return 0;
         for (auto&& i : args) {
+            if (*i->content.data() == "nothing") {
+                continue;
+            }
             std::printf("%.*s ", static_cast<int>(i->content.to_string().size()), i->content.to_string().data());
         }
         std::printf("\n");
-        return object{0};
+        return 0;
     }
     /**
      * @brief Get the string from stdin

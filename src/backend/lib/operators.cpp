@@ -7,6 +7,7 @@
  * @author 3swordman
  */
 namespace backend::lib {
+    // TODO: add more operator
     /**
      * @brief set the variable
      * 
@@ -35,6 +36,15 @@ namespace backend::lib {
     }
     object mod(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
         return std::stoll(args[0]->content.get_str_from_raw_string()) % std::stoll(args[1]->content.get_str_from_raw_string());
+    }
+    object bit_and(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+        return std::stoll(args[0]->content.get_str_from_raw_string()) & std::stoll(args[0]->content.get_str_from_raw_string());
+    }
+    object bit_or(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+        return std::stoll(args[0]->content.get_str_from_raw_string()) | std::stoll(args[0]->content.get_str_from_raw_string());
+    }
+    object bit_xor(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+        return std::stoll(args[0]->content.get_str_from_raw_string()) ^ std::stoll(args[0]->content.get_str_from_raw_string());
     }
     /**
      * @brief do nothing
