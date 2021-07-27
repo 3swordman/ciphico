@@ -30,6 +30,7 @@ namespace ast {
         {"%", "_mod"},
         {"&", "_bit_and"},
         {"|", "_bit_or"},
+        {"^", "_bit_xor"},
         {"!", "_not"},
         {"=", "_set"},
         {"`", "_make_array_index"}

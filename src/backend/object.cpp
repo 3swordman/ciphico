@@ -54,7 +54,7 @@ namespace backend {
         std::shared_ptr<std::string>& data() noexcept {
             return raw_string;
         }
-        std::string to_string() noexcept {
+        inline std::string to_string() noexcept {
             auto str = get_str_from_raw_string();
             if (expect_false_with_probability(str.empty(), 0.9)) {
                 return "";
@@ -68,6 +68,13 @@ namespace backend {
         }
     };
     template <typename T1, typename T2>
+    #if defined(__GNUC__) || defined(__clang__)
+    [[ gnu::always_inline ]] inline
+    #elif defined(_MSC_VER)
+    __forceinline
+    #else
+    inline
+    #endif
     void set_value(T1&& arg1, T2&& arg2) noexcept {
         variable_map.insert_or_assign(std::forward<T1>(arg1), std::forward<T2>(arg2));
     }

@@ -40,6 +40,8 @@ namespace is_something_datas {
         "]",
         "{",
         "}",
+        "<<",
+        ">>",
         "<=",
         ">=",
         "==",
