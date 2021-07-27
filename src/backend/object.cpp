@@ -8,11 +8,7 @@
 namespace backend {
     class object;
     static std::pmr::unordered_map<std::string, std::shared_ptr<object>> variable_map;
-    class 
-    #ifndef NDEBUG
-    alignas(16) 
-    #endif
-    object {
+    class alignas(16) object {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
     public:
         std::shared_ptr<std::any> extra_content = std::make_shared<std::any>();
@@ -21,14 +17,14 @@ namespace backend {
                 auto& data_ = variable_map.at(*raw_string);
                 raw_string = data_->raw_string;
                 extra_content = data_->extra_content;
-            } catch (const std::exception& e) {}
+            } catch (const std::exception&) {}
             return *this;
         }
         std::string& get_str_from_raw_string() noexcept {
             auto& str = *raw_string;
             try {
                 return *variable_map.at(str)->data();
-            } catch (const std::exception& e) {
+            } catch (const std::exception&) {
                 return str;
             }
         }
