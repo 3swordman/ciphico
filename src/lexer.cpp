@@ -19,6 +19,7 @@ namespace lexer {
         comment = 5
     };
 
+    constexpr size_t default_read = 32;
     /**
      * @brief Parse the file to a list
      * @todo Make the code shorter
@@ -30,26 +31,25 @@ namespace lexer {
     void parse(std::pmr::list<std::string>& lexer_content, std::FILE *file) noexcept {
         char_type type_of_i = char_type::unknown;
         std::string word = "";
-        static std::array<char, 32> buf;
-        size_t char_need_to_read = 32;
-        size_t already_read = 32;
+        static std::array<char, default_read> buf;
+        size_t char_need_to_read = default_read;
+        size_t already_read = default_read;
         bool should_stop = false;
-        bool is_eof = false;
         char i;
         while (true) {
             if (should_stop) {
                 break;
             }
             // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
-            if (already_read == char_need_to_read) {
-                if (std::fgetc(file) != EOF) {
+            if (expect_false_with_probability(already_read == char_need_to_read, 0.9)) {
+                if (expect_true_with_probability(std::fgetc(file) != EOF, 0.8)) {
                     std::fseek(file, -1, SEEK_CUR);
-                    size_t size = std::fread(buf.data(), sizeof(char), 32, file);
-                    if (size == char_need_to_read) {
+                    size_t size = std::fread(buf.data(), sizeof(char), default_read, file);
+                    if (expect_true_with_probability(size == char_need_to_read, 0.8)) {
                         i = buf[0];
                         already_read = 1;
                     } else {
-                        if (char_need_to_read != 32) {
+                        if (expect_false_with_probability(char_need_to_read != default_read, 0.8)) {
                             i = ' ';
                             should_stop = true;
                         } else {

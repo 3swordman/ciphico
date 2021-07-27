@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
         auto ast_tree = ast::parse(std::move(lexer_content));
         backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
-        std::cout << (e - d) / 1us << std::endl;
+        std::printf("%lld", (e - d) / 1us);
         return 0;
     } else {
         std::puts(help_message);

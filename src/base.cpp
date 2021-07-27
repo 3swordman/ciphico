@@ -52,7 +52,7 @@ static const std::string EOL = "_Endl";
 #if defined(__GNUC__) || defined(__clang__)
 [[ noreturn, gnu::always_inline ]] inline
 #elif defined(_MSC_VER)
-__forceinline [[ noreturn ]] 
+[[ noreturn ]] __forceinline
 #else
 [[ noreturn ]] inline
 #endif
@@ -69,6 +69,6 @@ using ssize_t = std::make_signed_t<size_t>;
 #else
 #define expect_false_with_probability(things, probability) (!!(things))
 #define expect_true_with_probability(things, probability) (!!(things))
-#define prefetch_memory(...) void(0)
+#define prefetch_memory(...) 0
 #endif
 #endif
