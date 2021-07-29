@@ -10,33 +10,33 @@ namespace backend::lib {
     /**
      * @brief Print the args to the stdout
      * 
-     * @param args things you want to print to the stdout
      * @return null
      */
     object print(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
         if (args.empty()) return 0;
+        std::stringstream result;
         for (auto&& i : args) {
             if (*i->content.data() == "nothing") {
                 continue;
             }
-            std::printf("%.*s ", static_cast<int>(i->content.to_string().size()), i->content.to_string().data());
+            result << i->content.to_string();
+            result << " ";
         }
-        std::printf("\n");
+        auto str = result.str();
+        std::printf("%.*s \n", static_cast<int>(str.size()), str.data());
         return 0;
     }
     /**
      * @brief Get the string from stdin
      * 
-     * @param args nothing
      * @return object 
      */
-    object get(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
-        char *c_str = static_cast<char *>(std::malloc(256 * sizeof(char)));
-        if (expect_true_with_probability(!std::fgets(c_str, 255, stdin), 0.9)) {
+    object get(std::pmr::deque<std::shared_ptr<ast::tree>>&&) noexcept {
+        static char c_str[256];
+        if (expect_false_with_probability(!std::fgets(c_str, 255, stdin), 0.9)) {
             make_error("Some errors about io have been happened");
         }
         std::string return_value{c_str};
-        std::free(c_str);
         return_value.erase(return_value.size() - 1);
         return "\"" + return_value + "\"";
     }
