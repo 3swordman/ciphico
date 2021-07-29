@@ -17,8 +17,8 @@ namespace backend {
         if (is_end(ast_tree)) {
             return;
         } else {
-            for (auto i = std::begin(ast_tree.childs);i != std::end(ast_tree.childs);++i) {
-                _execute(**i);
+            for (auto&& i : ast_tree.childs) {
+                _execute(*i);
             }
             try {
                 ast_tree.content = func_map.at(*ast_tree.content.data())(std::move(ast_tree.childs));

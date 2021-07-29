@@ -10,10 +10,9 @@ namespace backend::lib {
     /**
      * @brief abort the program
      * 
-     * @param args it don't need any argument
      * @return null
      */
-    [[ noreturn ]] object abort(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+    [[ noreturn ]] object abort(std::pmr::deque<std::shared_ptr<ast::tree>>&&) noexcept {
         std::abort();
     }
     /**

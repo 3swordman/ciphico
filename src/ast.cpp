@@ -152,7 +152,7 @@ namespace ast {
                 };
                 stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
-                frozen_list.insert(stack.size());
+                frozen_list.emplace(stack.size());
 
             } else {
                 // It isn't anything, make an error

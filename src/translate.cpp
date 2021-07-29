@@ -28,10 +28,10 @@ namespace translation {
         for (;i != end;++i) {
             if (is_something_datas::keyword_list.count(*i)) {
                 auto left = std::find_if(i, end, [](const std::string& str) {
-                    if (str == EOL) return false; // make_grammar_error("there aren't \":\" after keyword {}" + *i);
+                    if (str == EOL) return false; // make_error("there aren't \":\" after keyword {}" + *i);
                     return str == ":";
                 });
-                if (left == end) return; // make_grammar_error("there aren't \":\" after keyword {}" + *i);
+                if (left == end) return; // make_error("there aren't \":\" after keyword {}" + *i);
                 long number{1};
                 auto right = std::find_if(std::next(left), end, [&number](const std::string& str) {
                     if (str == ":") ++number;
@@ -43,7 +43,7 @@ namespace translation {
                     }
                     return false;
                 });
-                if (right == end) return; // make_grammar_error("there aren't \";\" after keyword " + *i);
+                if (right == end) return; // make_error("there aren't \";\" after keyword " + *i);
                 *i = "_" + *i;
                 syntax_content.insert(std::next(i), { "(", "{" });
                 *left = "{";
@@ -60,13 +60,13 @@ namespace translation {
         for (;i != end;++i) {
             if (*i == "func") {
                 auto left = std::find_if(i, end, [](const std::string& str) {
-                    if (str == EOL) return false; // make_grammar_error("there aren't \":\" after keyword {}" + *i);
+                    if (str == EOL) return false; // make_error("there aren't \":\" after keyword {}" + *i);
                     return str == ":";
                 });
                 auto func_name = *std::next(i);
                 syntax_content.insert(i, { "_set", "(", func_name, "," });
                 syntax_content.erase(std::next(i), std::next(i, 3));
-                if (left == end) return; // make_grammar_error("there aren't \":\" after keyword {}" + *i);
+                if (left == end) return; // make_error("there aren't \":\" after keyword {}" + *i);
                 long number{};
                 auto right = std::find_if(left, end, [&number](const std::string& str) {
                     if (str == ":") ++number;
@@ -78,7 +78,7 @@ namespace translation {
                     }
                     return false;
                 });
-                if (right == end) return; // make_grammar_error("there aren't \";\" after keyword " + *i);
+                if (right == end) return; // make_error("there aren't \";\" after keyword " + *i);
                 syntax_content.erase(std::prev(left, 1));
                 *i = "_make_func_with_args";
                 syntax_content.insert(std::next(i), "(");

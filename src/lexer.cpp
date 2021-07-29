@@ -44,7 +44,11 @@ namespace lexer {
             if (expect_false_with_probability(already_read == char_need_to_read, 0.9)) {
                 if (expect_true_with_probability(std::fgetc(file) != EOF, 0.8)) {
                     std::fseek(file, -1, SEEK_CUR);
+                    #ifdef _WIN32
+                    size_t size = _fread_nolock(buf.data(), sizeof(char), default_read, file);
+                    #else
                     size_t size = std::fread(buf.data(), sizeof(char), default_read, file);
+                    #endif
                     if (expect_true_with_probability(size == char_need_to_read, 0.8)) {
                         i = buf[0];
                         already_read = 1;
@@ -162,7 +166,7 @@ namespace lexer {
                         type_of_i = char_type::unknown;
                         goto restart;
                     } else {
-                        // It is still a part of the worf
+                        // It is still a part of the word
                         word += i;
                     }
                     break;

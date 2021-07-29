@@ -87,7 +87,7 @@ __forceinline
 inline
 #endif
 bool is_keyword(const std::string& keyword_string) noexcept {
-    return is_something_datas::keyword_list.count(keyword_string);
+    return bool(is_something_datas::keyword_list.count(keyword_string));
 }
 
 /**
@@ -104,7 +104,7 @@ __forceinline
 inline
 #endif
 bool is_operator(char character) noexcept {
-    return is_something_datas::truely_operator_list.count(std::string("") + character);
+    return bool(is_something_datas::truely_operator_list.count(std::string("") + character));
 }
 /**
  * @brief Tell you if the arg is an operator
@@ -120,7 +120,7 @@ __forceinline
 inline
 #endif
 bool is_operator(const std::string& str) noexcept {
-    return is_something_datas::truely_operator_list.count(str);
+    return bool(is_something_datas::truely_operator_list.count(str));
 }
 /**
  * @brief Tell you if the arg might be an operator

@@ -3,6 +3,7 @@
 #ifndef BASE_CPP
 #define BASE_CPP
 #define _CRT_SECURE_NO_WARNINGS 1
+#define _CRT_DISABLE_PERFCRIT_LOCKS 1
 #include <list>
 #include <deque>
 #include <string>
@@ -18,8 +19,14 @@
 #include <chrono>
 #include <iostream>
 #include <memory_resource>
+#include <map>
+#include <filesystem>
+#include <random>
+#include <sstream>
+#include <locale>
 
 #include <cassert>
+#include <clocale>
 #include <cstddef>
 #include <cstdlib>
 #include <cstdio>
@@ -27,6 +34,8 @@
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 #define ON_WINDOWS
 #include <Windows.h>
+#include <fcntl.h>
+#include <io.h>
 #endif
 #ifdef _MSC_VER
 #include <intrin.h>

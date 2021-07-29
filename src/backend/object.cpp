@@ -20,7 +20,7 @@ namespace backend {
             } catch (const std::exception&) {}
             return *this;
         }
-        std::string& get_str_from_raw_string() noexcept {
+        std::string get_str_from_raw_string() noexcept {
             auto& str = *raw_string;
             try {
                 return *variable_map.at(str)->data();
