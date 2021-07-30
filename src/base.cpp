@@ -29,7 +29,7 @@
 #include <clocale>
 #include <cstddef>
 #include <cstdlib>
-#include <cstdio>
+#include <stdio.h>
 #include "is_something.cpp"
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
 #define ON_WINDOWS

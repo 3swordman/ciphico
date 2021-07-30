@@ -42,8 +42,8 @@ namespace lexer {
             }
             // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
             if (expect_false_with_probability(already_read == char_need_to_read, 0.9)) {
-                if (expect_true_with_probability(std::fgetc(file) != EOF, 0.8)) {
-                    std::fseek(file, -1, SEEK_CUR);
+                if (expect_true_with_probability(fgetc(file) != EOF, 0.8)) {
+                    fseek(file, -1, SEEK_CUR);
                     #ifdef _WIN32
                     size_t size = _fread_nolock(buf.data(), sizeof(char), default_read, file);
                     #else

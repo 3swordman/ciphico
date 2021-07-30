@@ -1,1 +1,1 @@
-print(6 % 5, 8)
+print("hello world")

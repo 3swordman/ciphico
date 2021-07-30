@@ -8,6 +8,31 @@
  * @author 3swordman
  */
 namespace backend {
+    func_type get_func(object&& obj) noexcept {
+        obj.reload();
+        try {
+            if (obj.extra_content) {
+                return std::any_cast<func_type>(*obj.extra_content);
+            } else {
+                return std::any_cast<func_type>(std::make_any<int>(1));
+            }
+        } catch (const std::bad_any_cast&) {
+            try {
+                if (object(*obj.data()).extra_content) {
+                    return std::any_cast<func_type>(*object(*obj.data()).extra_content);
+                } else {
+                    return std::any_cast<func_type>(std::make_any<int>(1));
+                }
+            } catch (const std::bad_any_cast&) {
+                try {
+                    return func_map.at(*obj.data());
+                } catch (const std::exception&) {
+                    make_error("unknown function: " + *obj.data());
+                }
+            }
+        }
+
+    }
     /**
      * @brief Execute using the ast tree
      * @todo don't use goto
@@ -21,7 +46,7 @@ namespace backend {
                 _execute(*i);
             }
             try {
-                ast_tree.content = func_map.at(*ast_tree.content.data())(std::move(ast_tree.childs));
+                ast_tree.content = get_func(std::move(ast_tree.content))(std::move(ast_tree.childs));
             } catch (const std::exception& err) {
                 std::fprintf(stderr, "%s", err.what());
                 exit(1);
@@ -39,7 +64,7 @@ namespace backend {
     #else 
     inline
     #endif
-    void execute(std::pmr::deque<ast::tree>&& ast_tree) noexcept {
+    void execute(std::pmr::vector<ast::tree>&& ast_tree) noexcept {
         for (auto&& i : ast_tree) { 
             _execute(i);
         }

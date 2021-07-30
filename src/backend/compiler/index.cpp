@@ -66,7 +66,7 @@ namespace compiler {
      */
     void main(int, char *argv[]) {
         // TODO: make it faster
-        std::pmr::deque<ast::tree> ast_trees;
+        std::pmr::vector<ast::tree> ast_trees;
         {
             auto file = std::fopen(argv[1], "rb");
             std::pmr::list<std::string> lexer_content;
