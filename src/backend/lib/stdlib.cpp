@@ -12,7 +12,7 @@ namespace backend::lib {
      * 
      * @return null
      */
-    [[ noreturn ]] object abort(std::pmr::deque<std::shared_ptr<ast::tree>>&&) noexcept {
+    [[ noreturn ]] object abort(std::pmr::vector<std::shared_ptr<ast::tree>>&&) noexcept {
         std::abort();
     }
     /**
@@ -21,7 +21,7 @@ namespace backend::lib {
      * @param args the error code
      * @return null
      */
-    [[ noreturn ]] object exit(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+    [[ noreturn ]] object exit(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
         std::exit(std::stoi(args[0]->content.to_string()));
     }
     /**
@@ -30,7 +30,7 @@ namespace backend::lib {
      * @param args the time
      * @return nothing
      */
-    object sleep(std::pmr::deque<std::shared_ptr<ast::tree>>&& args) noexcept {
+    object sleep(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
         #ifdef ON_WINDOWS
         ::Sleep(std::stoul(args[0]->content.get_str_from_raw_string()));
         #else

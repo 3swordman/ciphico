@@ -40,7 +40,7 @@ namespace ast {
      */
     struct alignas(16) tree {
         backend::object content = "nothing"s;
-        std::pmr::deque<std::shared_ptr<tree>> childs;
+        std::pmr::vector<std::shared_ptr<tree>> childs;
     };
     /**
      * @brief Parse the lexer content, change it into an ast tree
@@ -50,7 +50,7 @@ namespace ast {
      * @return Some ast tree
      */
     auto parse(std::pmr::list<std::string>&& lexer_content) noexcept {
-        std::pmr::deque<tree> result{tree{}};
+        std::pmr::vector<tree> result{tree{}};
         tree *lexer_expr = &result[0];
         std::pmr::vector<tree *> stack{lexer_expr};
         long line_number{1};
