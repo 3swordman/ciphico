@@ -41,7 +41,11 @@ int main(int argc, char *argv[]) {
         auto ast_tree = ast::parse(std::move(lexer_content));
         backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
+<<<<<<< HEAD
         std::printf("%lld", (e - d) / 1us); // Don't change this
+=======
+        std::printf("%lld", (e - d) / 1us);
+>>>>>>> don't change this
         return 0;
     } else {
         std::fputs(help_message, stderr);
