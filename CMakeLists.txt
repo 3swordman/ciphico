@@ -18,7 +18,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic -Wno-global-c
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3  -ftree-vectorize -fdevirtualize-speculatively -fassociative-math -fno-stack-protector -funroll-loops")
 elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "MinSizeRel")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os") 
 endif()
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 # using GCC
