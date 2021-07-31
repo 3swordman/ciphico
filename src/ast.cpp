@@ -32,8 +32,7 @@ namespace ast {
         {"|", "_bit_or"},
         {"^", "_bit_xor"},
         {"!", "_not"},
-        {"=", "_set"},
-        {"`", "_make_array_index"}
+        {"=", "_set"}
     };
     /**
      * @brief The abstract lexer tree

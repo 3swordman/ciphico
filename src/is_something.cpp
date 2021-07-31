@@ -2,6 +2,7 @@
 #ifndef IS_SOMETHING_CPP
 #define IS_SOMETHING_CPP
 #include <string>
+#include <string_view>
 #include <unordered_set>
 /**
  * @author 3swordman
@@ -10,7 +11,7 @@ namespace is_something_datas {
     /**
      * @brief A list which contains keywords
      */
-    static const std::pmr::unordered_set<std::string> keyword_list {
+    static const std::pmr::unordered_set<std::string_view> keyword_list {
         "if",
         "while",
         "else",
@@ -25,7 +26,7 @@ namespace is_something_datas {
     /**
      * @brief A list which contains operators
      */
-    static const std::pmr::unordered_set<std::string> truely_operator_list {
+    static const std::pmr::unordered_set<std::string_view> truely_operator_list {
         ".",
         ",",
         "(",

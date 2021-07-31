@@ -7,6 +7,7 @@
 #include <list>
 #include <deque>
 #include <string>
+#include <string_view>
 #include <unordered_set>
 #include <unordered_map>
 #include <memory>
@@ -17,16 +18,13 @@
 #include <any>
 #include <array>
 #include <chrono>
-#include <iostream>
 #include <memory_resource>
 #include <map>
 #include <filesystem>
 #include <random>
 #include <sstream>
-#include <locale>
 
 #include <cassert>
-#include <clocale>
 #include <cstddef>
 #include <cstdlib>
 #include <stdio.h>
@@ -65,7 +63,7 @@ static const std::string EOL = "_Endl";
 #else
 [[ noreturn ]] inline
 #endif
-void make_error(const std::string& str) noexcept {
+void make_error(std::string_view str) noexcept {
     std::fprintf(stderr, "%.*s\n", static_cast<int>(str.size()), str.data());
     std::exit(1);
 }

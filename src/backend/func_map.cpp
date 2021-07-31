@@ -10,11 +10,11 @@
  * @author 3swordman
  */
 namespace backend {
-    using func_type = object(*)(std::pmr::vector<std::unique_ptr<ast::tree>>&&) noexcept;
+    using func_type = std::function<object(std::pmr::vector<std::unique_ptr<ast::tree>>&&)>;
     /**
      * @brief a map that contains diffrent type of function
      */
-    static const std::pmr::unordered_map<std::string, func_type> func_map {
+    static const std::pmr::unordered_map<std::string_view, func_type> func_map {
         {"print", lib::print},
         {"out", lib::print},
         {"exit", lib::exit},
@@ -34,8 +34,7 @@ namespace backend {
         {"int", lib::int_},
         {"str", lib::str_},
         {"del", lib::del_},
-        {"_getitem", lib::getitem},
-        {"_make_array_index", lib::make_array_index}
+        {"_getitem", lib::getitem}
     };
 };
 #endif
