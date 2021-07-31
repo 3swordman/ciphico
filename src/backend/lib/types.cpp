@@ -7,13 +7,13 @@
  * @author 3swordman
  */
 namespace backend::lib {
-    object int_(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
+    object int_(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         return args[0]->content.to_string();
     }
-    object str_(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
+    object str_(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         return "\"" + args[0]->content.to_string() + "\"";
     }
-    object getitem(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
+    object getitem(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         auto temp = args[1]->content.data()->find('`');
         if (temp == std::string::npos) {
             auto a = std::stoull(args[1]->content.to_string()) - 1;
@@ -34,7 +34,7 @@ namespace backend::lib {
             );
         }
     }
-    object del_(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
+    object del_(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         auto data = std::any_cast<std::pair<std::shared_ptr<std::string>, size_t>>(*args[0]->content.reload().extra_content);
         auto temp = object(*data.first).to_string();
         // std::cout << "\n" << *data.first << " " << temp << " " << data.second << std::endl;

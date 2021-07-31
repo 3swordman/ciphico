@@ -12,7 +12,7 @@ namespace backend::lib {
      * 
      * @return null
      */
-    object print(std::pmr::vector<std::shared_ptr<ast::tree>>&& args) noexcept {
+    object print(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         if (args.empty()) return 0;
         std::stringstream result;
         for (auto&& i : args) {
@@ -31,7 +31,7 @@ namespace backend::lib {
      * 
      * @return object 
      */
-    object get(std::pmr::vector<std::shared_ptr<ast::tree>>&&) noexcept {
+    object get(std::pmr::vector<std::unique_ptr<ast::tree>>&&) noexcept {
         static char c_str[256];
         if (expect_false_with_probability(!std::fgets(c_str, 255, stdin), 0.9)) {
             make_error("Some errors about io have been happened");

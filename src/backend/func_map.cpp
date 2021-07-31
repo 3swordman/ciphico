@@ -10,7 +10,7 @@
  * @author 3swordman
  */
 namespace backend {
-    using func_type = object(*)(std::pmr::vector<std::shared_ptr<ast::tree>>&&) noexcept;
+    using func_type = object(*)(std::pmr::vector<std::unique_ptr<ast::tree>>&&) noexcept;
     /**
      * @brief a map that contains diffrent type of function
      */
