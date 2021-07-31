@@ -14,14 +14,14 @@ namespace backend {
             if (obj.extra_content) {
                 return std::any_cast<func_type>(*obj.extra_content);
             } else {
-                return std::any_cast<func_type>(std::make_any<int>(1));
+                throw std::bad_any_cast{};
             }
         } catch (const std::bad_any_cast&) {
             try {
                 if (object(*obj.data()).extra_content) {
                     return std::any_cast<func_type>(*object(*obj.data()).extra_content);
                 } else {
-                    return std::any_cast<func_type>(std::make_any<int>(1));
+                    throw std::bad_any_cast{};
                 }
             } catch (const std::bad_any_cast&) {
                 try {
@@ -31,14 +31,22 @@ namespace backend {
                 }
             }
         }
-
+    }
+    ast::tree tree_copy(ast::tree& tree) noexcept {
+        ast::tree result;
+        result.content = tree.content;
+        result.childs.reserve(tree.childs.size());
+        for (size_t i = 0;i < tree.childs.size();++i) {
+            result.childs.emplace_back(std::make_unique<ast::tree>(tree_copy(*tree.childs[i])));
+        }
+        return result;
     }
     /**
      * @brief Execute using the ast tree
-     * @todo don't use goto
      * @param ast_tree Ast tree
      */
     inline void _execute(ast::tree& ast_tree) noexcept {
+        // TODO: add support for if/while
         if (is_end(ast_tree)) {
             return;
         } else {

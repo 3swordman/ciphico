@@ -20,7 +20,7 @@ namespace backend {
             } catch (const std::exception&) {}
             return *this;
         }
-        std::string get_str_from_raw_string() noexcept {
+        [[ nodiscard ]] std::string get_str_from_raw_string() noexcept {
             auto& str = *raw_string;
             try {
                 return *variable_map.at(str)->data();
@@ -45,16 +45,16 @@ namespace backend {
         object& operator=(object&&) noexcept = default;
         ~object() = default;
         #if defined(__GNUC__) || defined(__clang__)
-        [[ gnu::pure, gnu::always_inline ]] inline
+        [[ gnu::pure, gnu::always_inline, nodiscard ]] inline
         #elif defined(_MSC_VER)
-        __forceinline
+        [[ nodiscard ]] __forceinline
         #else
-        inline
+        [[ nodiscard ]] inline
         #endif
         std::shared_ptr<std::string>& data() noexcept {
             return raw_string;
         }
-        inline std::string to_string() noexcept {
+        [[ nodiscard ]] inline std::string to_string() noexcept {
             auto str = get_str_from_raw_string();
             if (expect_false_with_probability(str.empty(), 0.9)) {
                 return "";
