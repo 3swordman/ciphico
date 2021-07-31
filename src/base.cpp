@@ -34,6 +34,8 @@
 #include <Windows.h>
 #include <fcntl.h>
 #include <io.h>
+#else
+#include <thread>
 #endif
 #ifdef _MSC_VER
 #include <intrin.h>
