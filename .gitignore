@@ -1,4 +1,7 @@
 build/*
 .vscode/*
 .vs/*
+.tmp/*
 *.exe
+CMakeCache.txt
+*.cmake
