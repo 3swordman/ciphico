@@ -1,1 +1,0 @@
-/usr/bin/c++  -std=gnu++17 -Wall -Wextra -Wno-unknown-argument -Wno-ignored-optimization-argument -fvisibility=hidden -march=native  -fopenmp -rdynamic CMakeFiles/ciphico.dir/src/index.cpp.o -o ciphico 
