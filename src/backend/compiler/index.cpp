@@ -71,7 +71,7 @@ namespace compiler {
             auto file = std::fopen(argv[1], "rb");
             std::pmr::list<std::string> lexer_content;
             lexer::parse(lexer_content, file);
-            std::fclose(file);
+            fclose(file);
             translation::parse(lexer_content);
             ast_trees = ast::parse(std::move(lexer_content));
         }
@@ -84,7 +84,7 @@ namespace compiler {
         }
         file_content += "}";
         std::fprintf(file, "%.*s", static_cast<int>(file_content.size()), file_content.data());
-        std::fclose(file);
+        fclose(file);
         std::system(("clang -Ofast -ftree-vectorize -fassociative-math -fno-stack-protector -funroll-loops -fpermissive -o 1.exe " + file_name).c_str());
         std::remove(file_name.c_str());
         exit(0);

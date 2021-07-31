@@ -40,7 +40,7 @@ namespace ast {
      */
     struct alignas(16) tree {
         backend::object content = "nothing"s;
-        std::pmr::vector<std::shared_ptr<tree>> childs;
+        std::pmr::vector<std::unique_ptr<tree>> childs{};
     };
     /**
      * @brief Parse the lexer content, change it into an ast tree
@@ -50,7 +50,8 @@ namespace ast {
      * @return Some ast tree
      */
     auto parse(std::pmr::list<std::string>&& lexer_content) noexcept {
-        std::pmr::vector<tree> result{tree{}};
+        std::pmr::vector<tree> result{};
+        result.emplace_back();
         tree *lexer_expr = &result[0];
         std::pmr::vector<tree *> stack{lexer_expr};
         long line_number{1};
@@ -60,7 +61,7 @@ namespace ast {
         for (std::string& i : lexer_content) {
             if (i == "(") {
                 // Put the thing to the stack
-                lexer_expr->childs.emplace_back(std::make_shared<tree>());
+                lexer_expr->childs.emplace_back(std::make_unique<tree>());
                 stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
             } else if (i == ")" || i == "}") {
@@ -87,7 +88,7 @@ namespace ast {
             } else if (i == "{") {
                 // name it _func and put it into the stack
                 lexer_expr->content = "_func"s;
-                lexer_expr->childs.emplace_back(std::make_shared<tree>());
+                lexer_expr->childs.emplace_back(std::make_unique<tree>());
                 stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
             } else if (i.empty()) {
@@ -122,7 +123,7 @@ namespace ast {
                 // Pop from stack and push
                 stack.pop_back();
                 lexer_expr = stack.back();
-                lexer_expr->childs.emplace_back(std::make_shared<tree>());
+                lexer_expr->childs.emplace_back(std::make_unique<tree>());
                 lexer_expr = &*lexer_expr->childs.back();
                 stack.emplace_back(lexer_expr);
             } else if (i[0] == '"') {
@@ -146,10 +147,9 @@ namespace ast {
                 // Get the name of operator
                 auto tree_now = std::move(*lexer_expr);
                 lexer_expr->content = operator_map.find(i)->second;
-                lexer_expr->childs = {
-                    std::make_shared<tree>(std::move(tree_now)), 
-                    std::make_shared<tree>()
-                };
+                lexer_expr->childs.clear();
+                lexer_expr->childs.emplace_back(std::make_unique<tree>(std::move(tree_now)));
+                lexer_expr->childs.emplace_back(std::make_unique<tree>());
                 stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
                 frozen_list.emplace(stack.size());
