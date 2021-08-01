@@ -1,6 +1,6 @@
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable: 4710 4464 4668 4514 5039 5105)
+#pragma warning(disable: 4710 4464 4668 4514 5039 5105 4711)
 #endif
 #include "base.cpp"
 #include "lexer.cpp"
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         auto ast_tree = ast::parse(std::move(lexer_content));
         backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
-        std::printf("%lld", (e - d) / 1us);
+        std::printf("%lld", (e - d) / 1us); // Don't change this
         return 0;
     } else {
         std::fputs(help_message, stderr);

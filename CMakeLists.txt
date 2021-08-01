@@ -14,7 +14,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 # using Clang
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 -fvisibility=hidden -march=native -fopenmp")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unknown-argument -Wno-ignored-optimization-argument -Wno-c++98-compat -Wno-c++98-compat-extra-semi -Wno-reserved-id-macro -Wno-covered-switch-default")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic -Wno-global-constructors -Wno-exit-time-destructors -Wno-newline-eof -Wno-header-hygiene -Wno-missing-prototypes")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++98-compat-pedantic -Wno-global-constructors -Wno-exit-time-destructors -Wno-newline-eof -Wno-header-hygiene -Wno-missing-prototypes -ftemplate-backtrace-limit=0")
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3  -ftree-vectorize -fdevirtualize-speculatively -fassociative-math -fno-stack-protector -funroll-loops")
 elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "MinSizeRel")

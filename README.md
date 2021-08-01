@@ -10,4 +10,5 @@ Faster, Greater, More powerful phico
 2. ```mkdir build```
 3. ```cd build```
 4. ```cmake ..```
-5. On Linux ```./ciphico [source file]``` On windows ```./ciphico.exe [source file]```
+5. ```cmake --build . --config Release```
+6. On Linux ```./ciphico [source file]``` On windows ```.\ciphico [source file]```

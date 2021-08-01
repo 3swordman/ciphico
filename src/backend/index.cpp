@@ -8,7 +8,7 @@
  * @author 3swordman
  */
 namespace backend {
-    func_type get_func(object&& obj) noexcept {
+    [[ nodiscard ]] func_type get_func(object&& obj) noexcept {
         obj.reload();
         try {
             if (obj.extra_content) {
@@ -32,7 +32,10 @@ namespace backend {
             }
         }
     }
-    ast::tree tree_copy(ast::tree& tree) noexcept {
+    #if defined(__clang__) || defined(__GNUC__)
+    [[ gnu::pure ]]
+    #endif
+    [[ nodiscard ]] ast::tree tree_copy(ast::tree& tree) noexcept {
         ast::tree result;
         result.content = tree.content;
         result.childs.reserve(tree.childs.size());
@@ -49,6 +52,14 @@ namespace backend {
         // TODO: add support for if/while
         if (is_end(ast_tree)) {
             return;
+        // } else if (*ast_tree.content.data() == "_func") {
+        //     object temp;
+        //     auto&& func = [tree_ = tree_copy(ast_tree)]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
+        //         return object{};
+        //     };
+        //     temp.func_ptr = std::make_shared<void>(
+        //         func_type(std::move(func))
+        //     );
         } else {
             for (auto&& i : ast_tree.childs) {
                 _execute(*i);

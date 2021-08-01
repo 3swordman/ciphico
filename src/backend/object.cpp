@@ -12,6 +12,7 @@ namespace backend {
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
     public:
         std::shared_ptr<std::any> extra_content = std::make_shared<std::any>();
+        std::shared_ptr<void> func_ptr;
         object& reload() noexcept {
             try {
                 auto& data_ = variable_map.at(*raw_string);
@@ -28,7 +29,10 @@ namespace backend {
                 return str;
             }
         }
-        object() noexcept = default;
+        object() noexcept {
+            raw_string = std::make_shared<std::string>();
+            extra_content = std::make_shared<std::any>();
+        }
         object(const object&) noexcept = default;
         object(object&&) noexcept = default;
         template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
