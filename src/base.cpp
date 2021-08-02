@@ -54,7 +54,10 @@ static const std::string EOL = "_Endl";
 // Well, it's better than nothing.
 #define assume_unreachable() std::abort()
 #endif
-
+const static auto left_temp_symbol = ':';
+const static auto right_temp_symbol = ';';
+const static auto left_symbol = '{';
+const static auto right_symbol = '}';
 /**
  * @brief Print error message and quit, the exit code is 1
  * 

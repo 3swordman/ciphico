@@ -63,7 +63,7 @@ namespace ast {
                 lexer_expr->childs.emplace_back(std::make_unique<tree>());
                 stack.emplace_back(&*lexer_expr->childs.back());
                 lexer_expr = stack.back();
-            } else if (i == ")" || i == "}") {
+            } else if (i == ")" || i[0] == right_temp_symbol) {
                 if (frozen) {
                     if (frozen_list.count(stack.size())) {
                         frozen_list.erase(stack.size());
@@ -84,7 +84,7 @@ namespace ast {
                     stack.pop_back();
                     lexer_expr = stack.back();
                 }
-            } else if (i == "{") {
+            } else if (i[0] == left_temp_symbol) {
                 // name it _func and put it into the stack
                 lexer_expr->content = "_func"s;
                 lexer_expr->childs.emplace_back(std::make_unique<tree>());

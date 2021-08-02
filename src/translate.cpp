@@ -29,13 +29,13 @@ namespace translation {
             if (is_something_datas::keyword_list.count(*i)) {
                 auto left = std::find_if(i, end, [](const std::string& str) {
                     if (str == EOL) return false; // make_error("there aren't \":\" after keyword {}" + *i);
-                    return str == ":";
+                    return str[0] == left_symbol;
                 });
                 if (left == end) return; // make_error("there aren't \":\" after keyword {}" + *i);
                 long number{1};
                 auto right = std::find_if(std::next(left), end, [&number](const std::string& str) {
-                    if (str == ":") ++number;
-                    if (str == ";") {
+                    if (str[0] == left_symbol) ++number;
+                    if (str[0] == right_symbol) {
                         --number;
                         if (number == 0) {
                             return true;
@@ -45,10 +45,10 @@ namespace translation {
                 });
                 if (right == end) return; // make_error("there aren't \";\" after keyword " + *i);
                 *i = "_" + *i;
-                syntax_content.insert(std::next(i), { "(", "{" });
-                *left = "{";
-                *right = "}";
-                syntax_content.insert(left, { "}", "," });
+                syntax_content.insert(std::next(i), { "(", (std::string("") + left_temp_symbol) });
+                *left = (std::string("") + left_temp_symbol);
+                *right = std::string("") + right_temp_symbol;
+                syntax_content.insert(left, { (std::string("") + right_temp_symbol), "," });
                 syntax_content.insert(std::next(right), ")");
 
             }
@@ -61,7 +61,7 @@ namespace translation {
             if (*i == "func") {
                 auto left = std::find_if(i, end, [](const std::string& str) {
                     if (str == EOL) return false; // make_error("there aren't \":\" after keyword {}" + *i);
-                    return str == ":";
+                    return str[0] == left_symbol;
                 });
                 auto func_name = *std::next(i);
                 syntax_content.insert(i, { "_set", "(", func_name, "," });
@@ -69,8 +69,8 @@ namespace translation {
                 if (left == end) return; // make_error("there aren't \":\" after keyword {}" + *i);
                 long number{};
                 auto right = std::find_if(left, end, [&number](const std::string& str) {
-                    if (str == ":") ++number;
-                    if (str == ";") {
+                    if (str[0] == left_symbol) ++number;
+                    if (str[0] == right_symbol) {
                         --number;
                         if (number == 0) {
                             return true;
@@ -82,8 +82,8 @@ namespace translation {
                 syntax_content.erase(std::prev(left, 1));
                 *i = "_make_func_with_args";
                 syntax_content.insert(std::next(i), "(");
-                *left = "{";
-                *right = "}";
+                *left = (std::string("") + left_temp_symbol);
+                *right = (std::string("") + right_temp_symbol);
                 syntax_content.insert(left, ",");
                 syntax_content.insert(std::next(right), { ")", ")" });
 
@@ -93,8 +93,8 @@ namespace translation {
 
 
     void make_func_better(std::pmr::list<std::string>& syntax_content) noexcept {
-        auto iter = std::find(syntax_content.begin(), syntax_content.end(), "{"s);
-        auto end_pos = std::find(syntax_content.rbegin(), std::pmr::list<std::string>::reverse_iterator(iter), "}"s).base();
+        auto iter = std::find(syntax_content.begin(), syntax_content.end(), (std::string("") + left_temp_symbol));
+        auto end_pos = std::find(syntax_content.rbegin(), std::pmr::list<std::string>::reverse_iterator(iter), (std::string("") + right_temp_symbol)).base();
         std::replace(iter, end_pos, EOL, ","s);
         bool is_bracket = false;
         syntax_content.remove_if([&is_bracket](const std::string& str) {
@@ -102,7 +102,7 @@ namespace translation {
                 is_bracket = false;
                 return true;
             }
-            if (str == "{" || str == "(") {
+            if (str[0] == left_temp_symbol || str == "(") {
                 is_bracket = true;
             } else {
                 is_bracket = false;
@@ -114,7 +114,7 @@ namespace translation {
                 is_bracket = false;
                 return true;
             }
-            if (str == "}" || str == ")") {
+            if (str[0] == right_temp_symbol || str == ")") {
                 is_bracket = true;
             } else {
                 is_bracket = false;

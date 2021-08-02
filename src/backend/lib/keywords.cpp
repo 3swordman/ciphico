@@ -15,7 +15,8 @@ namespace backend {
          * @return null
          */
         object if_(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
-            if (bool(get_func(std::move(args[0]->content))({}))) {
+            auto a = get_func(std::move(args[0]->content))({});
+            if (bool(a)) {
                 return get_func(std::move(args[1]->content))({});
             }
             return 0;
