@@ -42,7 +42,6 @@ namespace backend {
      */
     inline void _execute(ast::tree& ast_tree) noexcept {
         // TODO: add support for while
-        // FIXME: make if twice possible
         if (is_end(ast_tree)) {
             return;
         } else if (*ast_tree.content.data() == "_func") {

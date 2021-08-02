@@ -113,9 +113,26 @@ namespace translation {
 
 
     void make_func_better(std::pmr::list<std::string>& syntax_content) noexcept {
-        auto iter = std::find(syntax_content.begin(), syntax_content.end(), (std::string("") + left_temp_symbol));
-        auto end_pos = std::find(syntax_content.rbegin(), std::pmr::list<std::string>::reverse_iterator(iter), (std::string("") + right_temp_symbol)).base();
-        std::replace(iter, end_pos, EOL, ","s);
+        auto past_iter = syntax_content.begin();
+        while (true) {
+            auto iter = std::find(past_iter, syntax_content.end(), (std::string("") + left_temp_symbol));
+            if (iter == syntax_content.end()) {
+                break;
+            }
+            long number{};
+            auto right = std::find_if(iter, syntax_content.end(), [&number](const std::string& str) {
+                if (str[0] == left_temp_symbol) ++number;
+                if (str[0] == right_temp_symbol) {
+                    --number;
+                    if (number == 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            past_iter = right;
+            std::replace(iter, right, EOL, ","s);
+        }
         bool is_bracket = false;
         syntax_content.remove_if([&is_bracket](const std::string& str) {
             if (is_bracket && (str == "," || str == EOL)) {
@@ -141,7 +158,7 @@ namespace translation {
             }
             return false;
         }).base());
-        iter = syntax_content.begin();
+        auto iter = syntax_content.begin();
         bool frozen{};
         std::pmr::vector<bool> func_lambda_stack{}; // true: lambda, false: function arg
         size_t s{};
