@@ -49,6 +49,51 @@ namespace backend::lib {
     object equals(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         return args[0]->content.get_str_from_raw_string() == args[1]->content.get_str_from_raw_string();
     }
+    object less_equals(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
+        if (!args[0]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[0]->content.get_str_from_raw_string()[0]) 
+            && !args[1]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[1]->content.get_str_from_raw_string()[0])
+        ) {
+            return stoll(args[0]->content.get_str_from_raw_string()) <= stoll(args[1]->content.get_str_from_raw_string());
+        } else {
+            return args[0]->content.get_str_from_raw_string() <= args[1]->content.get_str_from_raw_string();
+        }
+    }
+    object greater_equals(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
+        if (!args[0]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[0]->content.get_str_from_raw_string()[0]) 
+            && !args[1]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[1]->content.get_str_from_raw_string()[0])
+        ) {
+            return stoll(args[0]->content.get_str_from_raw_string()) >= stoll(args[1]->content.get_str_from_raw_string());
+        } else {
+            return args[0]->content.get_str_from_raw_string() >= args[1]->content.get_str_from_raw_string();
+        }
+    }
+    object less(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
+        if (!args[0]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[0]->content.get_str_from_raw_string()[0]) 
+            && !args[1]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[1]->content.get_str_from_raw_string()[0])
+        ) {
+            return stoll(args[0]->content.get_str_from_raw_string()) < stoll(args[1]->content.get_str_from_raw_string());
+        } else {
+            return args[0]->content.get_str_from_raw_string() < args[1]->content.get_str_from_raw_string();
+        }
+    }
+    object greater(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
+        if (!args[0]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[0]->content.get_str_from_raw_string()[0]) 
+            && !args[1]->content.get_str_from_raw_string().empty() 
+            && isdigit(args[1]->content.get_str_from_raw_string()[0])
+        ) {
+            return stoll(args[0]->content.get_str_from_raw_string()) > stoll(args[1]->content.get_str_from_raw_string());
+        } else {
+            return args[0]->content.get_str_from_raw_string() > args[1]->content.get_str_from_raw_string();
+        }
+    }
+
     /**
      * @brief do nothing
      * 

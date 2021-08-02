@@ -37,7 +37,11 @@ namespace backend {
         {"str", lib::str_},
         {"del", lib::del_},
         {"_getitem", lib::getitem},
-        {"_equals", lib::equals}
+        {"_equals", lib::equals},
+        {"_less_equals", lib::less_equals},
+        {"_greater_equals", lib::greater_equals},
+        {"_less", lib::less},
+        {"_greater", lib::greater}
     };
 };
 #endif

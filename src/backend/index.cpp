@@ -46,24 +46,21 @@ namespace backend {
             return;
         } else if (*ast_tree.content.data() == "_func") {
             object temp;
-            auto&& func = [tree_ = std::make_shared<ast::tree>(tree_copy(ast_tree))]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
-                auto tree = tree_copy(*tree_);
-                for (size_t i = 0;i < (tree.childs.size() - 1);++i) {
-                    _execute(*tree.childs[i]);
+            temp.extra_content = std::make_shared<std::any>(std::make_any<func_type>(
+                [tree_ = std::make_shared<ast::tree>(tree_copy(ast_tree))]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
+                    auto tree = tree_copy(*tree_);
+                    for (size_t i = 0;i < (tree.childs.size() - 1);++i) {
+                        _execute(*tree.childs[i]);
+                    }
+                    ast::tree temp_tree;
+                    temp_tree.content = "_set"s;
+                    temp_tree.childs.emplace_back(std::make_unique<ast::tree>());
+                    temp_tree.childs[0]->content = "_return"s;
+                    temp_tree.childs.emplace_back(std::move(tree_->childs.back()));
+                    _execute(temp_tree);
+                    return object("_return"s);
                 }
-                ast::tree temp_tree;
-                temp_tree.content = "_set"s;
-                temp_tree.childs.emplace_back(std::make_unique<ast::tree>());
-                temp_tree.childs[0]->content = "_return"s;
-                temp_tree.childs.emplace_back(std::move(tree_->childs.back()));
-                _execute(temp_tree);
-                return object("_return"s);
-            };
-            temp.extra_content = std::make_shared<std::any>(
-                std::make_any<func_type>(
-                    std::move(func)
-                )
-            );
+            ));
             ast_tree.content = std::move(temp);
             ast_tree.childs.clear();
         } else {
