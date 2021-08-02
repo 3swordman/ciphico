@@ -46,6 +46,9 @@ namespace backend::lib {
     object bit_xor(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         return std::stoll(args[0]->content.get_str_from_raw_string()) ^ std::stoll(args[0]->content.get_str_from_raw_string());
     }
+    object equals(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
+        return args[0]->content.get_str_from_raw_string() == args[1]->content.get_str_from_raw_string();
+    }
     /**
      * @brief do nothing
      * 

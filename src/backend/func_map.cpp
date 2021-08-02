@@ -36,7 +36,8 @@ namespace backend {
         {"int", lib::int_},
         {"str", lib::str_},
         {"del", lib::del_},
-        {"_getitem", lib::getitem}
+        {"_getitem", lib::getitem},
+        {"_equals", lib::equals}
     };
 };
 #endif

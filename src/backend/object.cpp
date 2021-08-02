@@ -68,7 +68,7 @@ namespace backend {
             } else if constexpr (std::is_same_v<T, long double>) {
                 return std::stold(get_str_from_raw_string());
             } else if constexpr (std::is_same_v<T, bool>) {
-                auto my_str = to_string();
+                auto my_str = get_str_from_raw_string();
                 return !(my_str == "0" || my_str == "\"\"");
             } else {
                 static_assert(false_t<T>::value, "??? what are you doing");
