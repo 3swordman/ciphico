@@ -1,3 +1,0 @@
-if int(get()) <= 1 {
-    print("test")
-}

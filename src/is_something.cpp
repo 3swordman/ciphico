@@ -13,14 +13,10 @@ namespace is_something_datas {
      */
     static const std::pmr::unordered_set<std::string_view> keyword_list {
         "if",
-        "while",
-        "else",
-        "for",
-        "not",
-        "let",
-        "var",
-        "and",
-        "or"
+        "while"
+    };
+    static const std::pmr::unordered_set<std::string_view> one_keyword_list {
+        "async"
     };
 
     /**

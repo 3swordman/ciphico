@@ -30,6 +30,7 @@ namespace backend {
         {"_bit_or", lib::bit_or},
         {"_bit_xor", lib::bit_xor},
         {"_if", lib::if_},
+        {"_async", lib::async_},
         {"nothing", lib::nothing},
         {"sleep", lib::sleep},
         {"get", lib::get},

@@ -36,8 +36,6 @@
 #include <Windows.h>
 #include <fcntl.h>
 #include <io.h>
-#else
-#include <thread>
 #endif
 #ifdef _MSC_VER
 #include <intrin.h>
@@ -46,7 +44,7 @@
 #endif
 static const std::string EOL = "_Endl";
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__clang__)
 #define assume_unreachable() __builtin_unreachable()
 #elif defined(_MSC_VER)
 #define assume_unreachable() __assume(0)

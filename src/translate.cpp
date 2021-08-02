@@ -51,6 +51,26 @@ namespace translation {
                 syntax_content.insert(left, { (std::string("") + right_temp_symbol), "," });
                 syntax_content.insert(std::next(right), ")");
 
+            } else if (is_something_datas::one_keyword_list.count(*i)) {
+                auto left = std::next(i);
+                if (left == end) return; // make_error("there aren't \":\" after keyword {}" + *i);
+                long number{1};
+                auto right = std::find_if(std::next(left), end, [&number](const std::string& str) {
+                    if (str[0] == left_symbol) ++number;
+                    if (str[0] == right_symbol) {
+                        --number;
+                        if (number == 0) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                if (right == end) return; // make_error("there aren't \";\" after keyword " + *i);
+                *i = "_" + *i;
+                syntax_content.insert(left, "(");
+                *left = std::string("") + left_temp_symbol;
+                *right = std::string("") + right_temp_symbol;
+                syntax_content.insert(std::next(right), ")");
             }
         }
     }
@@ -137,12 +157,12 @@ namespace translation {
                 case ')':
                     func_lambda_stack.pop_back();
                     break;
-                case '{':
+                case left_temp_symbol:
                     func_lambda_stack.emplace_back(true);
                     frozen = true;
                     syntax_content.insert(std::next(iter), "(");
                     break;
-                case '}':
+                case right_temp_symbol:
                     func_lambda_stack.pop_back();
                     syntax_content.insert(iter, ")");
                     break;
