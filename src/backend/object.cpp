@@ -9,10 +9,15 @@ namespace backend {
     class object;
     static std::pmr::unordered_map<std::string, std::shared_ptr<object>> variable_map;
     class alignas(16) object {
+        template <typename T>
+        struct false_t {
+            enum {
+                value = false
+            };
+        };
         std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
     public:
         std::shared_ptr<std::any> extra_content = std::make_shared<std::any>();
-        std::shared_ptr<void> func_ptr;
         object& reload() noexcept {
             try {
                 auto& data_ = variable_map.at(*raw_string);
@@ -48,6 +53,27 @@ namespace backend {
         object& operator=(const object&) noexcept = default;
         object& operator=(object&&) noexcept = default;
         ~object() = default;
+        template <typename T>
+        operator T() {
+            if constexpr (std::is_same_v<T, long>) {
+                return std::stol(get_str_from_raw_string());
+            } else if constexpr (std::is_same_v<T, int>) {
+                return std::stoi(get_str_from_raw_string());
+            } else if constexpr (std::is_same_v<T, long long>) {
+                return std::stoll(get_str_from_raw_string());
+            } else if constexpr (std::is_same_v<T, float>) {
+                return std::stof(get_str_from_raw_string());
+            } else if constexpr (std::is_same_v<T, double>) {
+                return std::stod(get_str_from_raw_string());
+            } else if constexpr (std::is_same_v<T, long double>) {
+                return std::stold(get_str_from_raw_string());
+            } else if constexpr (std::is_same_v<T, bool>) {
+                auto my_str = to_string();
+                return !(my_str == "0" || my_str == "\"\"");
+            } else {
+                static_assert(false_t<T>::value, "??? what are you doing");
+            }
+        }
         #if defined(__GNUC__) || defined(__clang__)
         [[ gnu::pure, gnu::always_inline, nodiscard ]] inline
         #elif defined(_MSC_VER)

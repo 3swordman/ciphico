@@ -18,17 +18,9 @@ namespace backend {
             }
         } catch (const std::bad_any_cast&) {
             try {
-                if (object(*obj.data()).extra_content) {
-                    return std::any_cast<func_type>(*object(*obj.data()).extra_content);
-                } else {
-                    throw std::bad_any_cast{};
-                }
-            } catch (const std::bad_any_cast&) {
-                try {
-                    return func_map.at(*obj.data());
-                } catch (const std::exception&) {
-                    make_error("unknown function: " + *obj.data());
-                }
+                return func_map.at(*obj.data());
+            } catch (const std::exception&) {
+                make_error("unknown function: " + *obj.data());
             }
         }
     }
@@ -52,14 +44,20 @@ namespace backend {
         // TODO: add support for if/while
         if (is_end(ast_tree)) {
             return;
-        // } else if (*ast_tree.content.data() == "_func") {
-        //     object temp;
-        //     auto&& func = [tree_ = tree_copy(ast_tree)]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
-        //         return object{};
-        //     };
-        //     temp.func_ptr = std::make_shared<void>(
-        //         func_type(std::move(func))
-        //     );
+        } else if (*ast_tree.content.data() == "_func") {
+            object temp;
+            auto&& func = [tree_ = std::make_shared<ast::tree>(tree_copy(ast_tree))]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
+                auto tree = tree_copy(*tree_);
+                _execute(tree);
+                return object{};
+            };
+            temp.extra_content = std::make_shared<std::any>(
+                std::make_any<func_type>(
+                    std::move(func)
+                )
+            );
+            ast_tree.content = std::move(temp);
+            ast_tree.childs.clear();
         } else {
             for (auto&& i : ast_tree.childs) {
                 _execute(*i);

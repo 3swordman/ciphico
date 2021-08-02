@@ -3,6 +3,7 @@
 #define BACKEND_FUNC_MAP_CPP
 #include "../ast.cpp"
 #include "lib/io.cpp"
+#include "lib/keywords.cpp"
 #include "lib/operators.cpp"
 #include "lib/stdlib.cpp"
 #include "lib/types.cpp"
@@ -28,6 +29,7 @@ namespace backend {
         {"_bit_and", lib::bit_and},
         {"_bit_or", lib::bit_or},
         {"_bit_xor", lib::bit_xor},
+        {"_if", lib::if_},
         {"nothing", lib::nothing},
         {"sleep", lib::sleep},
         {"get", lib::get},
