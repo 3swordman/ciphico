@@ -37,10 +37,10 @@ int main(int argc, char *argv[]) {
         backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
         std::printf("%lldus", (e - d) / 1us); // Don't change this
-        return 0;
+        std::exit(0);
     } else {
         std::fputs(help_message, stderr);
-        return 1;
+        std::exit(1);
     }
 }
 #ifdef _MSC_VER
