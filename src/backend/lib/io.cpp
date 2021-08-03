@@ -16,7 +16,7 @@ namespace backend::lib {
         if (args.empty()) return 0;
         std::stringstream result;
         for (auto&& i : args) {
-            if (*i->content.data() == "nothing") {
+            if (i->content.data() == "nothing") {
                 continue;
             }
             result << i->content.to_string();

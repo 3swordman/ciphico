@@ -37,7 +37,7 @@ namespace ast {
     /**
      * @brief The abstract lexer tree
      */
-    struct alignas(16) tree {
+    struct tree {
         backend::object content = "nothing"s;
         std::pmr::vector<std::unique_ptr<tree>> childs{};
     };

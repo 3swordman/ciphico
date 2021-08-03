@@ -11,16 +11,16 @@ namespace backend {
     [[ nodiscard ]] func_type get_func(object&& obj) noexcept {
         obj.reload();
         try {
-            if (obj.extra_content) {
-                return std::any_cast<func_type>(*obj.extra_content);
+            if (obj.content->extra_content.has_value()) {
+                return std::any_cast<func_type>(obj.content->extra_content);
             } else {
                 throw std::bad_any_cast{};
             }
         } catch (const std::bad_any_cast&) {
             try {
-                return func_map.at(*obj.data());
+                return func_map.at(obj.data());
             } catch (const std::exception&) {
-                make_error("unknown function: " + *obj.data());
+                make_error("unknown function: " + obj.data());
             }
         }
     }
@@ -44,9 +44,9 @@ namespace backend {
         // TODO: add support for while
         if (is_end(ast_tree)) {
             return;
-        } else if (*ast_tree.content.data() == "_func") {
+        } else if (ast_tree.content.data() == "_func") {
             object temp;
-            temp.extra_content = std::make_shared<std::any>(std::make_any<func_type>(
+            temp.content->extra_content = std::make_any<func_type>(
                 [tree_ = std::make_shared<ast::tree>(tree_copy(ast_tree))]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
                     auto tree = tree_copy(*tree_);
                     for (size_t i = 0;i < (tree.childs.size() - 1);++i) {
@@ -60,7 +60,7 @@ namespace backend {
                     _execute(temp_tree);
                     return object("_return"s);
                 }
-            ));
+            );
             ast_tree.content = std::move(temp);
             ast_tree.childs.clear();
         } else {

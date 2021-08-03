@@ -15,8 +15,8 @@ namespace backend::lib {
      * @return The name of varible
      */
     object set(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
-        set_value(*args[0]->content.data(), std::make_shared<object>(args[1]->content));
-        return *args[0]->content.data();
+        set_value(args[0]->content.data(), args[1]->content.content);
+        return args[0]->content.data();
     }
     object add(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
         if (std::isdigit((args[0]->content.get_str_from_raw_string()).back()) && std::isdigit((args[1]->content.get_str_from_raw_string()).back())) {
@@ -107,7 +107,7 @@ namespace backend::lib {
         return args.back()->content;
     }
     object make_array_index(std::pmr::vector<std::unique_ptr<ast::tree>>&& args) noexcept {
-        return *args[0]->content.data() + "`"s + *args[1]->content.data();
+        return args[0]->content.data() + "`"s + args[1]->content.data();
     }
 };
 #endif

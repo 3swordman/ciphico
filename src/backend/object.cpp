@@ -6,49 +6,47 @@
  * @author 3swordman
  */
 namespace backend {
-    class object;
-    static std::pmr::unordered_map<std::string, std::shared_ptr<object>> variable_map;
-    class alignas(16) object {
+    struct object_value;
+    static std::pmr::unordered_map<std::string, std::shared_ptr<object_value>> variable_map;
+    struct alignas(16) object_value {
+        std::string raw_string;
+        std::any extra_content;
+    };
+    class object {
         template <typename T>
         struct false_t {
             enum {
                 value = false
             };
         };
-        std::shared_ptr<std::string> raw_string = std::make_shared<std::string>();
     public:
-        std::shared_ptr<std::any> extra_content = std::make_shared<std::any>();
+        std::shared_ptr<object_value> content = std::make_shared<object_value>();
         object& reload() noexcept {
             try {
-                auto& data_ = variable_map.at(*raw_string);
-                raw_string = data_->raw_string;
-                extra_content = data_->extra_content;
+                content = variable_map.at(content->raw_string);
             } catch (const std::exception&) {}
             return *this;
         }
         [[ nodiscard ]] std::string get_str_from_raw_string() noexcept {
-            auto& str = *raw_string;
+            auto& str = content->raw_string;
             try {
-                return *variable_map.at(str)->data();
+                return variable_map.at(str)->raw_string;
             } catch (const std::exception&) {
                 return str;
             }
         }
-        object() noexcept {
-            raw_string = std::make_shared<std::string>();
-            extra_content = std::make_shared<std::any>();
-        }
+        object() noexcept  = default;
         object(const object&) noexcept = default;
         object(object&&) noexcept = default;
         template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
         object(T&& number) noexcept {
-            raw_string = std::make_shared<std::string>(std::to_string(std::forward<T>(number)));
+            content->raw_string = std::to_string(std::forward<T>(number));
         }
         object(const std::string& str) noexcept {
-            raw_string = std::make_shared<std::string>(str);
+            content->raw_string = str;
         }
         object(std::string&& str) noexcept {
-            raw_string = std::make_shared<std::string>(std::move(str));
+            content->raw_string = std::move(str);
         }
         object& operator=(const object&) noexcept = default;
         object& operator=(object&&) noexcept = default;
@@ -81,8 +79,8 @@ namespace backend {
         #else
         [[ nodiscard ]] inline
         #endif
-        std::shared_ptr<std::string>& data() noexcept {
-            return raw_string;
+        std::string& data() noexcept {
+            return content->raw_string;
         }
         [[ nodiscard ]] inline std::string to_string() noexcept {
             auto str = get_str_from_raw_string();
