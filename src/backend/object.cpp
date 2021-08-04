@@ -8,7 +8,7 @@
 namespace backend {
     struct object_value;
     static std::pmr::unordered_map<std::string, std::shared_ptr<object_value>> variable_map;
-    struct alignas(16) object_value {
+    struct alignas(16) object_value : public std::enable_shared_from_this<object_value> {
         std::string raw_string;
         std::any extra_content;
     };

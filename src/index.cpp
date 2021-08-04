@@ -15,6 +15,10 @@ inline void init() noexcept {
     #ifdef _WIN32
     _configthreadlocale(_ENABLE_PER_THREAD_LOCALE);
     #endif
+    assert(std::is_sorted(is_something_datas::keyword_list.begin(), is_something_datas::keyword_list.end()));
+    assert(std::is_sorted(is_something_datas::one_keyword_list.begin(), is_something_datas::one_keyword_list.end()));
+    assert(std::is_sorted(is_something_datas::truely_operator_list.begin(), is_something_datas::truely_operator_list.end()));
+    assert(std::is_sorted(is_something_datas::maybe_operator_list.begin(), is_something_datas::maybe_operator_list.end()));
     std::setvbuf(stdout, nullptr, _IOFBF, BUFSIZ);
 }
 

@@ -26,7 +26,7 @@ namespace translation {
     void keyword_to_func(std::pmr::list<std::string>& syntax_content) noexcept {
         auto i = syntax_content.begin(), end = syntax_content.end();
         for (;i != end;++i) {
-            if (is_something_datas::keyword_list.count(*i)) {
+            if (std::binary_search(is_something_datas::keyword_list.begin(), is_something_datas::keyword_list.end(), *i)) {
                 auto left = std::find_if(i, end, [](const std::string& str) {
                     if (str == EOL) return false; // make_error("there aren't \":\" after keyword {}" + *i);
                     return str[0] == left_symbol;
@@ -51,7 +51,7 @@ namespace translation {
                 syntax_content.insert(left, { (std::string("") + right_temp_symbol), "," });
                 syntax_content.insert(std::next(right), ")");
 
-            } else if (is_something_datas::one_keyword_list.count(*i)) {
+            } else if (std::binary_search(is_something_datas::one_keyword_list.begin(), is_something_datas::one_keyword_list.end(), *i)) {
                 auto left = std::next(i);
                 if (left == end) return; // make_error("there aren't \":\" after keyword {}" + *i);
                 long number{1};

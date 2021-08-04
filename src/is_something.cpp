@@ -1,9 +1,11 @@
 #pragma once
 #ifndef IS_SOMETHING_CPP
 #define IS_SOMETHING_CPP
+#include <algorithm>
 #include <string>
 #include <string_view>
-#include <unordered_set>
+#include <memory_resource>
+#include <vector>
 /**
  * @author 3swordman
  */
@@ -11,61 +13,60 @@ namespace is_something_datas {
     /**
      * @brief A list which contains keywords
      */
-    static const std::pmr::unordered_set<std::string_view> keyword_list {
+    static std::pmr::vector<std::string_view> keyword_list {
         "if",
         "while"
     };
-    static const std::pmr::unordered_set<std::string_view> one_keyword_list {
+    static std::pmr::vector<std::string_view> one_keyword_list {
         "async"
     };
 
     /**
      * @brief A list which contains operators
      */
-    static const std::pmr::unordered_set<std::string_view> truely_operator_list {
-        ".",
-        ",",
+    static std::pmr::vector<std::string_view> truely_operator_list {
+        "!=",
+        "%=",
+        "&&",
         "(",
         ")",
-        "^",
-        "~",
-        "`",
+        "*=",
+        "+=",
         ",",
+        "-=",
+        ".",
+        "/=",
         ":",
         ";",
+        "<<",
+        "<=>",
+        "==",
+        ">=",
+        ">>",
         "[",
         "]",
+        "^",
+        "`",
         "{",
-        "}",
-        "<<",
-        ">>",
-        "<=",
-        ">=",
-        "==",
-        "&&",
         "||",
-        "!=",
-        "+=",
-        "-=",
-        "*=",
-        "/=",
-        "%="
+        "}",
+        "~"
     };
 
     /**
      * @brief A list which contains things maybe operator, maybe a part of operator
      */
-    static const std::pmr::unordered_set<char> maybe_operator_list {
-        '+',
-        '-',
-        '*',
-        '/',
+    static std::pmr::vector<char> maybe_operator_list {
+        '!',
         '%',
         '&',
+        '*',
+        '+',
+        '-',
+        '/',
         '<',
-        '>',
-        '!',
         '=',
+        '>',
         '|'
     };
 
@@ -83,8 +84,8 @@ __forceinline
 #else 
 inline
 #endif
-bool is_keyword(const std::string& keyword_string) noexcept {
-    return bool(is_something_datas::keyword_list.count(keyword_string));
+bool is_keyword(std::string_view keyword_string) noexcept {
+    return std::binary_search(is_something_datas::keyword_list.begin(), is_something_datas::keyword_list.end(), keyword_string);
 }
 
 /**
@@ -101,7 +102,7 @@ __forceinline
 inline
 #endif
 bool is_operator(char character) noexcept {
-    return bool(is_something_datas::truely_operator_list.count(std::string("") + character));
+    return std::binary_search(is_something_datas::truely_operator_list.begin(), is_something_datas::truely_operator_list.end(), (std::string("") + character));
 }
 /**
  * @brief Tell you if the arg is an operator
@@ -116,8 +117,8 @@ __forceinline
 #else 
 inline
 #endif
-bool is_operator(const std::string& str) noexcept {
-    return bool(is_something_datas::truely_operator_list.count(str));
+bool is_operator(std::string_view str) noexcept {
+    return std::binary_search(is_something_datas::truely_operator_list.begin(), is_something_datas::truely_operator_list.end(), str);
 }
 /**
  * @brief Tell you if the arg might be an operator
@@ -133,7 +134,7 @@ __forceinline
 inline
 #endif
 bool maybe_operator(char character) noexcept {
-    return is_something_datas::maybe_operator_list.count(character) || is_operator(character);
+    return std::binary_search(is_something_datas::maybe_operator_list.begin(), is_something_datas::maybe_operator_list.end(), character) || is_operator(character);
 }
 
 #endif

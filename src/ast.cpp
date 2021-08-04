@@ -43,7 +43,6 @@ namespace ast {
     };
     /**
      * @brief Parse the lexer content, change it into an ast tree
-     * @bug (a) is correct but not be allowed
      * 
      * @param lexer_content The output of lexer
      * @return Some ast tree
@@ -55,7 +54,7 @@ namespace ast {
         std::pmr::vector<tree *> stack{lexer_expr};
         long line_number{1};
         size_t frozen{};
-        std::pmr::unordered_set<size_t> frozen_list{};
+        std::pmr::set<size_t> frozen_list{};
         lexer_content.emplace_back(EOL);
         for (std::string& i : lexer_content) {
             if (i == "(") {
