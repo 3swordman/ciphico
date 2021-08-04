@@ -42,6 +42,7 @@
 #else
 #include <x86intrin.h>
 #endif
+#include "tools/intrusive_ptr.cpp"
 static const std::string EOL = "_Endl";
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -73,7 +74,6 @@ void make_error(std::string_view str) noexcept {
     std::exit(1);
 }
 using namespace std::literals;
-using ssize_t = std::make_signed_t<size_t>;
 #if defined(__GNUC__) || defined(__clang__)
 #define expect_false_with_probability(things, probability) __builtin_expect_with_probability(!!(things), false, (probability))
 #define expect_true_with_probability(things, probability) __builtin_expect_with_probability(!!(things), true, (probability))
