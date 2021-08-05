@@ -36,10 +36,7 @@ namespace lexer {
         size_t already_read = default_read;
         bool should_stop = false;
         char i;
-        while (true) {
-            if (should_stop) {
-                break;
-            }
+        while (!should_stop) {
             // For an example, the content of file is "test", the i will be "t", "e", "s", "t" and " "
             // TODO: use MapViewOfFile or mmap instead of std::fread
             if (expect_false_with_probability(already_read == char_need_to_read, 0.9)) {

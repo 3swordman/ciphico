@@ -6,12 +6,14 @@
  * @author 3swordman
  */
 namespace backend {
-    struct object_value;
-    static std::pmr::unordered_map<std::string, std::shared_ptr<object_value>> variable_map;
-    struct alignas(16) object_value : public std::enable_shared_from_this<object_value> {
+    class object;
+    class alignas(16) object_value : public std::enable_shared_from_this<object_value> {
+        friend class object;
         std::string raw_string;
+    public:
         std::any extra_content;
     };
+    static std::pmr::unordered_map<std::string, std::shared_ptr<object_value>> variable_map;
     class object {
         template <typename T>
         struct false_t {

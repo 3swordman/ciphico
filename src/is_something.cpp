@@ -13,18 +13,18 @@ namespace is_something_datas {
     /**
      * @brief A list which contains keywords
      */
-    static std::pmr::vector<std::string_view> keyword_list {
+    static const std::pmr::vector<std::string_view> keyword_list {
         "if",
         "while"
     };
-    static std::pmr::vector<std::string_view> one_keyword_list {
+    static const std::pmr::vector<std::string_view> one_keyword_list {
         "async"
     };
 
     /**
      * @brief A list which contains operators
      */
-    static std::pmr::vector<std::string_view> truely_operator_list {
+    static const std::pmr::vector<std::string_view> truely_operator_list {
         "!=",
         "%=",
         "&&",
@@ -56,7 +56,7 @@ namespace is_something_datas {
     /**
      * @brief A list which contains things maybe operator, maybe a part of operator
      */
-    static std::pmr::vector<char> maybe_operator_list {
+    static const std::pmr::vector<char> maybe_operator_list {
         '!',
         '%',
         '&',

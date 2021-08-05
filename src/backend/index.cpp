@@ -31,8 +31,8 @@ namespace backend {
         ast::tree result;
         result.content = tree.content;
         result.childs.reserve(tree.childs.size());
-        for (size_t i = 0;i < tree.childs.size();++i) {
-            result.childs.emplace_back(std::make_unique<ast::tree>(tree_copy(*tree.childs[i])));
+        for (auto& i : tree.childs) {
+            result.childs.emplace_back(std::make_unique<ast::tree>(tree_copy(*i)));
         }
         return result;
     }
@@ -44,14 +44,14 @@ namespace backend {
         // TODO: add support for while
         if (is_end(ast_tree)) {
             return;
-        } else if (ast_tree.content.data() == "_func") {
+        } else if (expect_false_with_probability(ast_tree.content.data() == "_func", 0.6)) {
             object temp;
             temp.content->extra_content = std::make_any<func_type>(
                 [tree_ = std::make_shared<ast::tree>(tree_copy(ast_tree))]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
                     auto tree = tree_copy(*tree_);
-                    for (size_t i = 0;i < (tree.childs.size() - 1);++i) {
-                        _execute(*tree.childs[i]);
-                    }
+                    std::for_each(tree.childs.begin(), std::prev(tree.childs.end()), [](std::unique_ptr<ast::tree>& i) {
+                        _execute(*i);
+                    });
                     ast::tree temp_tree;
                     temp_tree.content = "_set"s;
                     temp_tree.childs.emplace_back(std::make_unique<ast::tree>());
