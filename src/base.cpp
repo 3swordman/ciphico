@@ -32,6 +32,7 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <stdio.h>
 // Windows
 #if defined(_WIN32) || defined(WIN32) || defined(_WIN64) || defined(WIN64)
