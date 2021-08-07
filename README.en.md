@@ -11,6 +11,8 @@ Phico is a programming language that anyone can easily write.
 ## What is ciphico?
 
 Ciphico is an implementation of the phico programming language, it is fast and powerful.
+Ciphico can be used as an interpreter or a compiler.
+Ciphico is extremely fast if the code is short.
 
 ## Installation
 

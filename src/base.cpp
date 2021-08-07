@@ -7,6 +7,7 @@
 // Disable lock
 #define _CRT_DISABLE_PERFCRIT_LOCKS 1
 // Include files
+#pragma region include_files
 #include <list>
 #include <deque>
 #include <string>
@@ -27,7 +28,6 @@
 #include <sstream>
 #include <set>
 #include <thread>
-#include <coroutine>
 // Inclue C files
 #include <cassert>
 #include <cstddef>
@@ -48,6 +48,7 @@
 #endif
 // Useful file
 #include "is_something.cpp"
+#pragma endregion include_files
 // The end of line
 static const std::string EOL = "_Endl";
 // Define something unreachable

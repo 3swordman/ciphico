@@ -40,12 +40,15 @@ namespace backend {
      * @brief Execute using the ast tree
      * @param ast_tree Ast tree
      */
+    #if defined(_MSC_VER) && !defined(__clang__)
+    #pragma inline_depth(2)
+    #endif
     inline void _execute(ast::tree& ast_tree) noexcept {
         // TODO: add support for while
         if (is_end(ast_tree)) {
             return;
         } else if (expect_false_with_probability(ast_tree.content.data() == "_func", 0.6)) {
-            object temp;
+            object temp{""s};
             temp.content->extra_content = std::make_any<func_type>(
                 [tree_ = std::make_shared<ast::tree>(tree_copy(ast_tree))]([[ maybe_unused ]] std::pmr::vector<std::unique_ptr<ast::tree>>&& args) {
                     auto tree = tree_copy(*tree_);

@@ -119,8 +119,8 @@ namespace translation {
             if (iter == syntax_content.end()) {
                 break;
             }
-            long number{};
-            auto right = std::find_if(iter, syntax_content.end(), [&number](const std::string& str) {
+            long number{1};
+            auto right = std::find_if(std::next(iter), syntax_content.end(), [&number](const std::string& str) {
                 if (str[0] == left_temp_symbol) ++number;
                 if (str[0] == right_temp_symbol) {
                     --number;

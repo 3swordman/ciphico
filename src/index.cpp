@@ -7,6 +7,7 @@
 #include "translate.cpp"
 #include "ast.cpp"
 #include "backend/index.cpp"
+#include "backend/compiler/index.cpp"
 /**
  * @brief Init the program
  */
@@ -22,14 +23,16 @@ inline void init() noexcept {
     std::setvbuf(stdout, nullptr, _IOFBF, BUFSIZ);
 }
 
-constexpr auto help_message = R"(Ciphico v0.1,
-Use "ciphico [filename]" to run the phico code.)";
+constexpr auto help_message = R"(Ciphico v0.1.1
+Copyright 3swordman, calvinlin.
+Use "ciphico [filename]" to run the phico code.
+Use "ciphico -c [filename]" to compile (experimental) the phico code.)";
 /**
  * @brief Main function
  */
 int main(int argc, char *argv[]) {
     // TODO: make it faster
-    if (expect_true_with_probability(argc == 2, 0.99)) {
+    if (expect_true_with_probability(argc == 2, 0.8)) {
         init();
         auto d = std::chrono::high_resolution_clock::now();
         auto file = std::fopen(argv[1], "rb");
@@ -41,6 +44,9 @@ int main(int argc, char *argv[]) {
         backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
         std::printf("%lldus", (e - d) / 1us); // Don't change this
+        std::exit(0);
+    } else if (expect_true_with_probability(argc == 3 && (std::strcmp(argv[1], "-c") == 0), 0.8)) {
+        compiler::main(argc, argv);
         std::exit(0);
     } else {
         std::fputs(help_message, stderr);
