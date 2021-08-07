@@ -24,9 +24,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -ffunction-sections -fdata-sections 
 endif()
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 # using GCC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 -Wall -Wextra -Wno-unknown-argument -Wno-ignored-optimization-argument -fvisibility=hidden -march=native -fopenmp")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 -Wall -Wextra -fvisibility=hidden -march=native -fopenmp -Wno-unknown-pragmas")
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -flto -ftree-vectorize -fdevirtualize-speculatively -fassociative-math -fno-stack-protector -funroll-loops -ffunction-sections -fdata-sections")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -flto -ftree-vectorize -fdevirtualize-speculatively -fno-stack-protector -funroll-loops -ffunction-sections -fdata-sections")
 elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "MinSizeRel")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -ffunction-sections -fdata-sections -fassociative-math -fno-stack-protector")
 endif()

@@ -1,5 +1,7 @@
 # Ciphico
 
+[![CodeQL](https://github.com/3swordman/ciphico/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/3swordman/ciphico/actions/workflows/codeql-analysis.yml)
+
 ## 介绍
 
 Phico 的一个实现

@@ -74,6 +74,7 @@ constexpr auto right_symbol = '}';
  * 
  * @param str_ error message
  */
+#define ignore_value(a) ([](auto){}(a))
 #define make_error(str_) do {std::string_view CONCAT(str, __LINE__) = std::move(str_);std::fprintf(stderr, "Error: %.*s\n", static_cast<int>(CONCAT(str, __LINE__).size()), CONCAT(str, __LINE__).data());std::exit(1);} while (false)
 using namespace std::literals;
 #if defined(__GNUC__) || defined(__clang__)

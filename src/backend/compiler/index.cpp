@@ -89,7 +89,7 @@ namespace compiler {
         file_content += "}";
         std::fprintf(file, "%.*s", static_cast<int>(file_content.size()), file_content.data());
         fclose(file);
-        std::system(("clang -O3 -fpermissive -std=c++17 -o a.exe " + file_name).c_str());
+        ignore_value(std::system(("clang -O3 -fpermissive -std=c++17 -o a.exe " + file_name).c_str()));
         std::remove(file_name.c_str());
         exit(0);
     }

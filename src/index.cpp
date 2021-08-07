@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
         auto ast_tree = ast::parse(std::move(lexer_content));
         backend::execute(std::move(ast_tree));
         auto e = std::chrono::high_resolution_clock::now();
-        std::printf("%lldus", (e - d) / 1us); // Don't change this
+        std::printf("%lldus", static_cast<long long>((e - d) / 1us)); // Don't change this
         std::exit(0);
     } else if (expect_true_with_probability(argc == 3 && (std::strcmp(argv[1], "-c") == 0), 0.8)) {
         compiler::main(argc, argv);
